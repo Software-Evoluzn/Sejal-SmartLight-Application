@@ -33,12 +33,23 @@ class DBHelpher(context: Context,factory:SQLiteDatabase.CursorFactory?):
     }
 
     fun RegisterUserHelpher(srNo:Int,device_id:String){
-        val values=ContentValues()
-        values.put(srNo_col,srNo)
-        values.put(device_id_col,device_id)
-
         val db=this.writableDatabase
-        db.insert(tableName,null,values)
+
+        val cursor=db.rawQuery("SELECT * FROM $tableName WHERE $srNo_col=?" , arrayOf(srNo.toString()))
+
+        val contentValues=ContentValues().apply {
+            put(srNo_col,srNo)
+            put(device_id_col,device_id,)
+        }
+
+         if(cursor.count==0){
+             db.insert(tableName,null,contentValues)
+
+         }else{
+             db.update(tableName,contentValues, "Sr_No=?", arrayOf(srNo.toString()))
+         }
+
+
         db.close()
 
     }
