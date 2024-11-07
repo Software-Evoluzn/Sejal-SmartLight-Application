@@ -20,15 +20,12 @@ class DashBoardActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_dash_board)
          mUsbHandler = USBHandler(this)
-
-
-        masterSWITCH = findViewById(R.id.MasterSwitch)
-        masterSwitchCardView = findViewById(R.id.cardMasterSwitch)
+         masterSWITCH = findViewById(R.id.MasterSwitch)
+         masterSwitchCardView = findViewById(R.id.cardMasterSwitch)
 
         masterSwitchCardView.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
-
         }
 
         masterSWITCH.setOnCheckedChangeListener { buttonView, isChecked ->

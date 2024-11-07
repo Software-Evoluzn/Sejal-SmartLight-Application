@@ -12,7 +12,7 @@ class DBHelpher(context: Context,factory:SQLiteDatabase.CursorFactory?):
         companion object{
             private val DATABASE_NAME="Lights"
             private val DATABASE_VERSION=1
-             val tableName="devices_query"
+            val tableName="devices_query"
             val srNo_col="Sr_No"
             val device_id_col="Device_id"
 
@@ -54,15 +54,9 @@ class DBHelpher(context: Context,factory:SQLiteDatabase.CursorFactory?):
                 device_id=cursor.getString(1)
             }
             arrContacts.add(contact)
-
         }
         cursor.close()
         return arrContacts
-
-
-
-
     }
 
-
-}
+    }

@@ -19,7 +19,6 @@ class USBHandler(private  val context:Context){
     private var device: UsbDevice? = null
     private var connection: UsbDeviceConnection? = null
     private var serial: UsbSerialDevice? = null
-
     private val ACTION_USB_PERMISSION = "permission"
 
     private val broadcastReceiver = object : BroadcastReceiver() {

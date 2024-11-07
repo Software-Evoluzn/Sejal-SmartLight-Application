@@ -18,16 +18,9 @@ class MainActivity : AppCompatActivity() {
         mDbHelpher=DBHelpher(this,null)
         mUsbHandler=USBHandler(this)
 
-
-        //insert data
         insertData()
 
-        //fetchData
         val deviceList=mDbHelpher.fetchData()
-
-        Log.i("device list","device list $deviceList")
-
-
         val recyclerView: RecyclerView =findViewById(R.id.ButtonRecyclerView)
         recyclerView.layoutManager=GridLayoutManager(this,3)
         val adapter=ToggleButtonAdapter(deviceList,mUsbHandler)
@@ -38,7 +31,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun insertData() {
 
-        //T:01:05:5:G:
+
 
         //device1
         mDbHelpher.RegisterUserHelpher(1, "T:5:1:1:")
