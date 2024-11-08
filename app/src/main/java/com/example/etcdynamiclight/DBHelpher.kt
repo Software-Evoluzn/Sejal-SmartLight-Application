@@ -11,7 +11,7 @@ class DBHelpher(context: Context,factory:SQLiteDatabase.CursorFactory?):
 
         companion object{
             private val DATABASE_NAME="Lights"
-            private val DATABASE_VERSION=1
+            private val DATABASE_VERSION=2
 
 
             val tableName="devices_query"
@@ -65,6 +65,8 @@ class DBHelpher(context: Context,factory:SQLiteDatabase.CursorFactory?):
 
     }
 
+
+
     fun RegisterUserHelpher(srNo:Int,device_id:String){
         val db=this.writableDatabase
         val cursor=db.rawQuery("SELECT * FROM $tableName WHERE $srNo_col=?" , arrayOf(srNo.toString()))
@@ -79,6 +81,30 @@ class DBHelpher(context: Context,factory:SQLiteDatabase.CursorFactory?):
          }
         db.close()
 
+    }
+
+
+    fun fetchSchedulingData():ArrayList<ScheduleModel>{
+        val db=this.readableDatabase
+        val fetchQuery="SELECT * FROM $tableSchedule"
+        val cursor=db.rawQuery(fetchQuery,null)
+        val arrContacts=ArrayList<ScheduleModel>()
+        while(cursor.moveToNext()){
+            val scheduleModel=ScheduleModel().apply {
+                sch_everyDay=cursor.getString(1)
+                sch_sDate=cursor.getString(2)
+                sch_eDate=cursor.getString(3)
+                sch_sTime=cursor.getString(4)
+                sch_eTime=cursor.getString(5)
+                sch_value=cursor.getString(6)
+
+
+            }
+            arrContacts.add(scheduleModel)
+
+        }
+        cursor.close()
+        return arrContacts
     }
 
     fun fetchData():ArrayList<ContactModel>{

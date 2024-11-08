@@ -31,6 +31,7 @@ class DashBoardActivity : AppCompatActivity() {
     lateinit var OffTime:String
     lateinit var startDate:String
     lateinit var endDate:String
+    lateinit var mDbHelpher:DBHelpher
 
 
 
@@ -39,6 +40,7 @@ class DashBoardActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_dash_board)
          mUsbHandler = USBHandler(this)
+        mDbHelpher=DBHelpher(this,null)
          masterSWITCH = findViewById(R.id.MasterSwitch)
          masterSwitchCardView = findViewById(R.id.cardMasterSwitch)
          spinnerDay=findViewById(R.id.spinnerDay)
@@ -108,6 +110,32 @@ class DashBoardActivity : AppCompatActivity() {
             timeAndDatePicker.OpenTimePickerDialog {selectTime->
                 OffTime=selectTime
                 Log.i("Off time","OffTime : $OffTime")
+
+            }
+
+        }
+
+        val scheduleButton:AppCompatButton=findViewById(R.id.ScheduleButton)
+
+        scheduleButton.setOnClickListener{
+            if(startDate.isNotEmpty() && endDate.isNotEmpty()) {
+                if(OnTime.isNotEmpty() && OffTime.isNotEmpty()) {
+                    mDbHelpher.ScheduleRegistration("123", startDate, endDate, OnTime, OffTime, "1")
+                }else{
+                    Toast.makeText(this@DashBoardActivity,"please select On time and Off time",Toast.LENGTH_SHORT).show()
+                }
+            }else{
+                Toast.makeText(this@DashBoardActivity,"select today",Toast.LENGTH_SHORT).show()
+            }
+            val fetchingScheduleData=mDbHelpher.fetchSchedulingData()
+            for( i in fetchingScheduleData) {
+                println("sch_everyday: ${i.sch_everyDay}")
+                println("startdate: ${i.sch_sDate}")
+                println("enddate: ${i.sch_eDate}")
+                println("startTime: ${i.sch_sTime}")
+                println("endTime: ${i.sch_eTime}")
+                println("value: ${i.sch_value}")
+                println("---------------------------------")
 
             }
 
