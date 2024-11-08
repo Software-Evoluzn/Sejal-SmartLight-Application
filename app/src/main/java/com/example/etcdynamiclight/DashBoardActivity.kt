@@ -2,6 +2,7 @@ package com.example.etcdynamiclight
 
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -10,11 +11,13 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.SwitchCompat
 import androidx.cardview.widget.CardView
+import java.time.LocalDate
 
 class DashBoardActivity : AppCompatActivity() {
 
@@ -26,6 +29,8 @@ class DashBoardActivity : AppCompatActivity() {
     lateinit var timeAndDatePicker:ShowingDataAndTimePicker
     lateinit var OnTime:String
     lateinit var OffTime:String
+    lateinit var startDate:String
+    lateinit var endDate:String
 
 
 
@@ -59,21 +64,17 @@ class DashBoardActivity : AppCompatActivity() {
 
 
         spinnerDay.onItemSelectedListener=object:AdapterView.OnItemSelectedListener{
+            @RequiresApi(Build.VERSION_CODES.O)
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                   var selectedItem=spinnerDay.getItemAtPosition(position)
                 when(selectedItem){
                     "Today"->{
-                        val alertDialog=AlertDialog.Builder(this@DashBoardActivity)
-                        alertDialog.setTitle("Select Time")
-                        alertDialog.setMessage("Select On Time and Off Time for Smart Lights")
-                        alertDialog.setIcon(R.drawable.evoluznlogo)
-                        alertDialog.setPositiveButton("Yes"){dialogInterface,which->
 
-                            alertDialog.setCancelable(true)
-                        }
+                        val current =LocalDate.now()
+                        startDate= current.toString()
+                        endDate=current.toString()
+                        Log.i("today date","date $startDate and $endDate")
 
-                        val dialogShowing:AlertDialog= alertDialog.create()
-                        dialogShowing.show()
 
                     }
 
