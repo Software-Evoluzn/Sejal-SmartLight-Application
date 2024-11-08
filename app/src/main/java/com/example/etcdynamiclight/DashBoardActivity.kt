@@ -12,7 +12,6 @@ import android.widget.Spinner
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.SwitchCompat
@@ -32,6 +31,7 @@ class DashBoardActivity : AppCompatActivity() {
     lateinit var startDate:String
     lateinit var endDate:String
     lateinit var mDbHelpher:DBHelpher
+    lateinit var setAlarmFromDatabase:SetAlarmFromDatabase
 
 
 
@@ -41,6 +41,7 @@ class DashBoardActivity : AppCompatActivity() {
         setContentView(R.layout.activity_dash_board)
          mUsbHandler = USBHandler(this)
         mDbHelpher=DBHelpher(this,null)
+        setAlarmFromDatabase= SetAlarmFromDatabase()
          masterSWITCH = findViewById(R.id.MasterSwitch)
          masterSwitchCardView = findViewById(R.id.cardMasterSwitch)
          spinnerDay=findViewById(R.id.spinnerDay)
@@ -138,6 +139,9 @@ class DashBoardActivity : AppCompatActivity() {
                 println("---------------------------------")
 
             }
+
+            setAlarmFromDatabase.fetchDataFromDataBase(fetchingScheduleData)
+
 
         }
 
