@@ -1,6 +1,6 @@
 package com.example.etcdynamiclight
 
-import android.content.DialogInterface
+
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -23,9 +23,9 @@ class DashBoardActivity : AppCompatActivity() {
     lateinit var masterSwitchCardView: CardView
     lateinit var  mUsbHandler:USBHandler
     lateinit var spinnerDay:Spinner
-     lateinit var timeAndDatePicker:ShowingDataAndTimePicker
-     lateinit var OnTime:String
-     lateinit var OffTime:String
+    lateinit var timeAndDatePicker:ShowingDataAndTimePicker
+    lateinit var OnTime:String
+    lateinit var OffTime:String
 
 
 
@@ -36,15 +36,15 @@ class DashBoardActivity : AppCompatActivity() {
          mUsbHandler = USBHandler(this)
          masterSWITCH = findViewById(R.id.MasterSwitch)
          masterSwitchCardView = findViewById(R.id.cardMasterSwitch)
-        spinnerDay=findViewById(R.id.spinnerDay)
-        timeAndDatePicker=ShowingDataAndTimePicker(this,supportFragmentManager)
+         spinnerDay=findViewById(R.id.spinnerDay)
+         timeAndDatePicker=ShowingDataAndTimePicker(this,supportFragmentManager)
 
-        masterSwitchCardView.setOnClickListener {
+         masterSwitchCardView.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
 
-        masterSWITCH.setOnCheckedChangeListener { buttonView, isChecked ->
+         masterSWITCH.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
                 mUsbHandler.sendData("T:5:G:G:1")
             } else {
@@ -95,15 +95,20 @@ class DashBoardActivity : AppCompatActivity() {
 
         val OnTimeButton:AppCompatButton=findViewById(R.id.selectOnTime)
         OnTimeButton.setOnClickListener{
-           OnTime= timeAndDatePicker.OpenTimePickerDialog().toString()
-            Log.i("On time","$OnTime")
+            timeAndDatePicker.OpenTimePickerDialog { selectTime->
+                OnTime=selectTime
+                Log.i("onTime","on time : $OnTime")
+            }
 
         }
 
         val OffTimeButton:AppCompatButton=findViewById(R.id.SelectOfTime)
         OffTimeButton.setOnClickListener{
-           OffTime= timeAndDatePicker.OpenTimePickerDialog().toString()
-            Log.i("Off time","$OffTime")
+            timeAndDatePicker.OpenTimePickerDialog {selectTime->
+                OffTime=selectTime
+                Log.i("Off time","OffTime : $OffTime")
+
+            }
 
         }
 
