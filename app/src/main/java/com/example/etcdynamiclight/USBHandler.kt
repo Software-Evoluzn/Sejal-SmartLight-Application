@@ -13,7 +13,7 @@ import android.widget.Toast
 import com.felhr.usbserial.UsbSerialDevice
 import com.felhr.usbserial.UsbSerialInterface
 
-class USBHandler(private  val context:Context){
+class USBHandler(private val context: Context) {
 
     private val usbManager: UsbManager = context.getSystemService(Context.USB_SERVICE) as UsbManager
     private var device: UsbDevice? = null
@@ -51,7 +51,6 @@ class USBHandler(private  val context:Context){
         }
     }
 
-
     init {
         val filter = IntentFilter().apply {
             addAction(ACTION_USB_PERMISSION)
@@ -59,8 +58,6 @@ class USBHandler(private  val context:Context){
             addAction(UsbManager.ACTION_USB_DEVICE_DETACHED)
         }
         context.registerReceiver(broadcastReceiver, filter)
-
-        //automatically start UsbConnection
         startUsbConnection()
     }
 
@@ -71,11 +68,9 @@ class USBHandler(private  val context:Context){
                 device = entry.value
                 val deviceVendorId = device?.vendorId
                 if (deviceVendorId == 1155) {
-                    val intent = PendingIntent.getBroadcast(
-                        context, 0, Intent(ACTION_USB_PERMISSION), 0
-                    )
-                    usbManager.requestPermission(device, intent)
-                    Toast.makeText(context, "Connection Successful", Toast.LENGTH_SHORT).show()
+                    val permissionIntent = PendingIntent.getBroadcast(context, 0, Intent(ACTION_USB_PERMISSION), PendingIntent.FLAG_UPDATE_CURRENT)
+                    usbManager.requestPermission(device, permissionIntent)
+                    Log.i("UsbHelper", "Requesting permission for USB device")
                     return
                 }
             }
@@ -84,25 +79,35 @@ class USBHandler(private  val context:Context){
         }
     }
 
-    fun sendData(input: String) {
-        serial?.write(input.toByteArray())
-        Log.i("UsbHelper", "Sending data: $input")
+    fun sendData(input: String, retryCount: Int = 3) {
+        startUsbConnection() // Ensure USB is claimed before sending
+        val isSent = serial?.write(input.toByteArray()) ?: false
+        if (isSent==false && retryCount > 0) {
+            Log.i("UsbHelper", "Retry sending data")
+            sendData(input, retryCount - 1)
+        } else if (isSent==false) {
+            Log.e("UsbHelper", "Failed to send data after retries")
+        } else {
+            Log.i("UsbHelper", "Data sent successfully: $input")
+        }
     }
 
     fun disconnect() {
         serial?.close()
+        connection?.close()
+        serial = null
+        connection = null
+        device = null
+        unRegisterReceiver()
+        Log.i("UsbHelper", "USB connection closed and receiver unregistered")
     }
 
     private val readCallback = UsbSerialInterface.UsbReadCallback { data ->
         val dataStr = data?.let { String(it, Charsets.UTF_8) }
         Log.i("UsbHelper", "Data received: $dataStr")
-        // Add code here to handle data if needed, like updating a UI component
     }
 
-
-    fun unRegisterReceiver(){
+    fun unRegisterReceiver() {
         context.unregisterReceiver(broadcastReceiver)
     }
-
-
 }

@@ -36,8 +36,11 @@ class UsbService : Service() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if(intent?.action=="SEND_DATA") {
+            println("send data")
             val message = intent.getStringExtra("message")
+            println("messege")
             if (message != null) {
+                println("messege is not null")
                 sendDataToUsbHandler(message)
             }
         }
@@ -102,14 +105,13 @@ class UsbService : Service() {
     }
 
     fun sendDataToUsbHandler(messege:String){
+        println("messege is send to UsbHandler class ")
         mUSBHandler.sendData(messege)
 
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        if(mUSBHandler!=null) {
-            mUSBHandler.unRegisterReceiver()
-        }
+        mUSBHandler.unRegisterReceiver()
     }
 }
