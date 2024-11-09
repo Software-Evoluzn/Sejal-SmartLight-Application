@@ -1,5 +1,10 @@
 package com.example.etcdynamiclight
 
+import android.annotation.SuppressLint
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -7,71 +12,60 @@ import java.util.Locale
 
 class SetAlarmFromDatabase {
 
-    fun fetchDataFromDataBase(fetchingScheduleData: ArrayList<ScheduleModel>) {
+    @SuppressLint("ScheduleExactAlarm")
+    fun fetchDataFromDataBase(fetchingScheduleData: ArrayList<ScheduleModel>, context: Context) {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val timeFormat = SimpleDateFormat("hh:mm a", Locale.getDefault())
 
-        val dateFormat=SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        val timeFormat=SimpleDateFormat("hh:mm a", Locale.getDefault()) //input time format
-        val timeFormat24Hour=SimpleDateFormat("HH:mm",Locale.getDefault())//24-hour time format
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-        for(models in fetchingScheduleData){
+        for (models in fetchingScheduleData) {
+            // Parse dates and times
+            val startDate = dateFormat.parse(models.sch_sDate)
+            val endDate = dateFormat.parse(models.sch_eDate)
+            val startTime = timeFormat.parse(models.sch_sTime)
+            val endTime = timeFormat.parse(models.sch_eTime)
 
-            //convert start date and end date to date format
-            val startDate: Date? =dateFormat.parse(models.sch_sDate)
-            val endDate:Date?=dateFormat.parse(models.sch_eDate)
+            // Check if parsing was successful
+            if (startDate != null && endDate != null && startTime != null && endTime != null) {
+                val calendar = Calendar.getInstance()
 
-            //convert start time end time in 24 hour format
-            val startTime:Date?=timeFormat.parse(models.sch_sTime)
-            val endTime:Date?=timeFormat.parse(models.sch_eTime)
+                // Loop through each day between start and end date
+                var currentDate = startDate
+                while (currentDate <= endDate) {
+                        // Set alarm at start time
+                        calendar.time = currentDate
+                        calendar.set(Calendar.HOUR_OF_DAY, startTime.hours)
+                        calendar.set(Calendar.MINUTE, startTime.minutes)
+                        calendar.set(Calendar.SECOND, 0)
 
-            println("start date  $startDate")
-            println("end date $endDate")
-            println("start time $startTime")
-            println("end time $endTime")
+                        val startIntent = Intent(context, AlarmReceiver::class.java).apply {
+                            putExtra("message", "Start Alarm Triggered!")
+                        }
+                        val startPendingIntent = PendingIntent.getBroadcast(
+                            context, 0, startIntent, PendingIntent.FLAG_UPDATE_CURRENT
+                        )
+                        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, startPendingIntent)
 
+                        // Set alarm at end time
+                        calendar.set(Calendar.HOUR_OF_DAY, endTime.hours)
+                        calendar.set(Calendar.MINUTE, endTime.minutes)
 
-            //extract the specific part
-            //start date
-            val calendar=Calendar.getInstance()
+                        val endIntent = Intent(context, AlarmReceiver::class.java).apply {
+                            putExtra("message", "End Alarm Triggered!")
+                        }
+                        val endPendingIntent = PendingIntent.getBroadcast(
+                            context, 1, endIntent, PendingIntent.FLAG_UPDATE_CURRENT
+                        )
+                        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, endPendingIntent)
 
-
-            calendar.time=startDate?:Date()
-            val startYear=calendar.get(Calendar.YEAR)
-            val startMonth=calendar.get(Calendar.MONTH)+1
-            val startDay=calendar.get(Calendar.DAY_OF_MONTH)
-
-
-
-
-            //end date
-            calendar.time=endDate?:Date()
-            val endYear=calendar.get(Calendar.YEAR)
-            val endMonth=calendar.get(Calendar.MONTH)+1
-            val endDay=calendar.get(Calendar.DAY_OF_MONTH)
-
-
-            //start time
-            calendar.time=startTime?:Date()
-            val startHour=calendar.get(Calendar.HOUR)
-            val startMinute=calendar.get(Calendar.MINUTE)
-
-
-            //end time
-            calendar.time=endTime?:Date()
-            val endHour=calendar.get(Calendar.HOUR)
-            val endMinute=calendar.get(Calendar.MINUTE)
-
-            calendar.set(startYear,startMonth, startDay,startHour,startMinute)
-
-
-            println("$startYear  $startMonth $startDay $endYear $endMonth $endDay $startHour $startMinute $endHour $endMinute")
-
-
-
-
-
-
+                        // Move to the next day
+                        calendar.time = currentDate
+                        calendar.add(Calendar.DATE, 1)
+                        currentDate = calendar.time
+                    }
+            }
         }
-
-
     }
+
 }

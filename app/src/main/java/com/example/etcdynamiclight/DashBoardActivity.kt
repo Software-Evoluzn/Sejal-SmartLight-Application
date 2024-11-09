@@ -141,7 +141,7 @@ class DashBoardActivity : AppCompatActivity() {
 
             }
 
-            setAlarmFromDatabase.fetchDataFromDataBase(fetchingScheduleData)
+            setAlarmFromDatabase.fetchDataFromDataBase(fetchingScheduleData,this)
 
 
         }
