@@ -76,6 +76,7 @@ class DashBoardActivity : AppCompatActivity() {
                         val current =LocalDate.now()
                         startDate= current.toString()
                         endDate=current.toString()
+                        println("start data : $startDate and end data : $endDate")
                         Log.i("today date","date $startDate and $endDate")
 
 
