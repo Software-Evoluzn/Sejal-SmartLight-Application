@@ -11,6 +11,7 @@ import android.media.RingtoneManager
 import android.os.Build
 import android.os.IBinder
 import android.os.Looper
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import java.util.logging.Handler
@@ -29,7 +30,7 @@ class UsbService : Service() {
         super.onCreate()
 
 
-            mUSBHandler= USBHandler(this)
+            mUSBHandler= USBHandler(applicationContext)
 
 
 
@@ -109,11 +110,18 @@ class UsbService : Service() {
 
     }
 
-    fun sendDataToUsbHandler(messege:String){
-        println("messege is send to UsbHandler class ")
-        mUSBHandler.sendData(messege)
-
+    fun sendDataToUsbHandler(message: String) {
+        Log.i("UsbService", "Sending message to USB Handler: $message")
+        if (mUSBHandler.serial == null) {
+            mUSBHandler.startUsbConnection()  // Attempt reconnection if needed
+            android.os.Handler(Looper.getMainLooper()).postDelayed({
+                mUSBHandler.sendData(message)
+            }, 500) // small delay to ensure connection
+        } else {
+            mUSBHandler.sendData(message)
+        }
     }
+
 
     override fun onDestroy() {
         super.onDestroy()

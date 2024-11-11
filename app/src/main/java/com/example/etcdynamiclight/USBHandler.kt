@@ -8,6 +8,8 @@ import android.content.IntentFilter
 import android.hardware.usb.UsbDevice
 import android.hardware.usb.UsbDeviceConnection
 import android.hardware.usb.UsbManager
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.widget.Toast
 import com.felhr.usbserial.UsbSerialDevice
@@ -18,8 +20,14 @@ class USBHandler(private  val context:Context){
     private val usbManager: UsbManager = context.getSystemService(Context.USB_SERVICE) as UsbManager
     private var device: UsbDevice? = null
     private var connection: UsbDeviceConnection? = null
-    private var serial: UsbSerialDevice? = null
+    var serial: UsbSerialDevice? = null
     private val ACTION_USB_PERMISSION = "permission"
+
+    val filter = IntentFilter().apply {
+        addAction(ACTION_USB_PERMISSION)
+        addAction(UsbManager.ACTION_USB_DEVICE_ATTACHED)
+        addAction(UsbManager.ACTION_USB_DEVICE_DETACHED)
+    }
 
     private val broadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
@@ -53,11 +61,7 @@ class USBHandler(private  val context:Context){
 
 
     init {
-        val filter = IntentFilter().apply {
-            addAction(ACTION_USB_PERMISSION)
-            addAction(UsbManager.ACTION_USB_DEVICE_ATTACHED)
-            addAction(UsbManager.ACTION_USB_DEVICE_DETACHED)
-        }
+
         context.registerReceiver(broadcastReceiver, filter)
 
         //automatically start UsbConnection
@@ -84,9 +88,18 @@ class USBHandler(private  val context:Context){
     }
 
     fun sendData(input: String) {
-        serial?.write(input.toByteArray())
-        Log.i("UsbHelper", "Sending data: $input")
+        if (serial == null) {
+            Log.i("UsbHelper", "Serial is not initialized; attempting to reconnect.")
+            startUsbConnection()
+            Handler(Looper.getMainLooper()).postDelayed({
+                serial?.write(input.toByteArray()) ?: Log.i("UsbHelper", "Failed to send; Serial still null.")
+            }, 500) // delay to allow USB initialization
+        } else {
+            serial?.write(input.toByteArray())
+            Log.i("UsbHelper", "Sending data: $input")
+        }
     }
+
 
     fun disconnect() {
         serial?.close()

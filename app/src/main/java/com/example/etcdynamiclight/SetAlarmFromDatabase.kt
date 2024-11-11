@@ -41,7 +41,7 @@ class SetAlarmFromDatabase {
 
                         val startIntent = Intent(context, AlarmReceiver::class.java).apply {
                             action="ON_ALARM"
-                            putExtra("message", "Start Alarm Triggered!")
+                            putExtra("message", "T:5:G:G:1")
                         }
                         val startPendingIntent = PendingIntent.getBroadcast(context, 0, startIntent, PendingIntent.FLAG_UPDATE_CURRENT)
                         alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, startPendingIntent)
@@ -52,7 +52,7 @@ class SetAlarmFromDatabase {
 
                         val endIntent = Intent(context, AlarmReceiver::class.java).apply {
                             action="OFF_ALARM"
-                            putExtra("message", "End Alarm Triggered!")
+                            putExtra("message", "T:5:G:G:0")
                         }
                         val endPendingIntent = PendingIntent.getBroadcast(context, 1, endIntent, PendingIntent.FLAG_UPDATE_CURRENT)
                         alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, endPendingIntent)

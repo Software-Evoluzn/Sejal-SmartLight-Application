@@ -24,6 +24,7 @@ class DashBoardActivity : AppCompatActivity() {
     lateinit var masterSWITCH: SwitchCompat
     lateinit var masterSwitchCardView: CardView
     lateinit var  mUsbHandler:USBHandler
+lateinit var mUsbService:UsbService
     lateinit var spinnerDay:Spinner
     lateinit var timeAndDatePicker:ShowingDataAndTimePicker
     lateinit var OnTime:String
@@ -46,6 +47,7 @@ class DashBoardActivity : AppCompatActivity() {
          masterSwitchCardView = findViewById(R.id.cardMasterSwitch)
          spinnerDay=findViewById(R.id.spinnerDay)
          timeAndDatePicker=ShowingDataAndTimePicker(this,supportFragmentManager)
+        mUsbService=UsbService()
 
          masterSwitchCardView.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
@@ -53,11 +55,16 @@ class DashBoardActivity : AppCompatActivity() {
         }
 
          masterSWITCH.setOnCheckedChangeListener { buttonView, isChecked ->
+             val serviceIntent=Intent(this,UsbService::class.java)
+             serviceIntent.action="SEND_DATA"
             if (isChecked) {
-                mUsbHandler.sendData("T:5:G:G:1")
+
+                serviceIntent.putExtra("message","T:5:G:G:1")
+
             } else {
-                mUsbHandler.sendData("T:5:G:G:0")
+                serviceIntent.putExtra("message","T:5:G:G:0")
             }
+             startService(serviceIntent)
         }
 
         val arrSpinner= arrayOf("Select item","Today","Set Date","Weekly")
