@@ -18,11 +18,8 @@ class AlarmReceiver: BroadcastReceiver() {
             "T:5:G:G:0"  //stop the device
 
         val serviceIntent=Intent(context,UsbService::class.java)
-        println("serviceIntent class ")
         serviceIntent.action="SEND_DATA"
-        println("action send data")
         serviceIntent.putExtra("message",messege)
-        println("messege is send")
         context?.startService(serviceIntent)
 
 

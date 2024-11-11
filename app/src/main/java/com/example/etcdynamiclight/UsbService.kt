@@ -53,11 +53,11 @@ class UsbService : Service() {
 
 //        playAlarmSound()
 //
-//        //show the notification to run the service in the forground
+//      // show the notification to run the service in the forground
 //        startForeground(NOTIFICATION_ID,createNotification())
+//
 
-
-        //stopSelf()
+       // stopSelf()
 
         return START_STICKY
     }
@@ -65,11 +65,11 @@ class UsbService : Service() {
 //    @RequiresApi(Build.VERSION_CODES.O)
 //    private fun createNotification():Notification{
 //        val builder=Notification.Builder(this,CHANNEL_ID)
-//            .setSmallIcon(R.drawable.final_logo)
+//            .setSmallIcon(R.drawable.logos1)
 //            .setContentTitle("Evoluzn")
 //            .setContentText("Smart Light On")
 //            .setPriority(Notification.PRIORITY_LOW)
-//            .setOngoing(true)  //keep the notification ongoing while service is running
+//
 //
 //        return builder.build()
 //
@@ -89,7 +89,7 @@ class UsbService : Service() {
 //            notificationManager.createNotificationChannel(channel)
 //        }
 //    }
-//
+////
 //    fun playAlarmSound(){
 //        val alarmSound= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
 //        var ringtone:Ringtone?=RingtoneManager.getRingtone(this,alarmSound)
@@ -102,7 +102,7 @@ class UsbService : Service() {
 //
 //        ringtone?.play()
 //    }
-//
+
 //
 
     override fun onBind(intent: Intent?): IBinder? {

@@ -16,7 +16,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.SwitchCompat
 import androidx.cardview.widget.CardView
+import com.google.android.material.datepicker.MaterialDatePicker
+import androidx.core.util.Pair
+import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneId
+
 
 class DashBoardActivity : AppCompatActivity() {
 
@@ -24,7 +30,7 @@ class DashBoardActivity : AppCompatActivity() {
     lateinit var masterSWITCH: SwitchCompat
     lateinit var masterSwitchCardView: CardView
     lateinit var  mUsbHandler:USBHandler
-lateinit var mUsbService:UsbService
+    lateinit var mUsbService:UsbService
     lateinit var spinnerDay:Spinner
     lateinit var timeAndDatePicker:ShowingDataAndTimePicker
     lateinit var OnTime:String
@@ -41,26 +47,30 @@ lateinit var mUsbService:UsbService
         enableEdgeToEdge()
         setContentView(R.layout.activity_dash_board)
          mUsbHandler = USBHandler(this)
-        mDbHelpher=DBHelpher(this,null)
-        setAlarmFromDatabase= SetAlarmFromDatabase()
+         mDbHelpher=DBHelpher(this,null)
+         setAlarmFromDatabase= SetAlarmFromDatabase()
          masterSWITCH = findViewById(R.id.MasterSwitch)
          masterSwitchCardView = findViewById(R.id.cardMasterSwitch)
          spinnerDay=findViewById(R.id.spinnerDay)
          timeAndDatePicker=ShowingDataAndTimePicker(this,supportFragmentManager)
-        mUsbService=UsbService()
+         mUsbService=UsbService()
 
          masterSwitchCardView.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
 
-         masterSWITCH.setOnCheckedChangeListener { buttonView, isChecked ->
-             val serviceIntent=Intent(this,UsbService::class.java)
-             serviceIntent.action="SEND_DATA"
+        val sharePreference=getSharedPreferences("switchSharePreference", MODE_PRIVATE)
+        masterSWITCH.isChecked=sharePreference.getBoolean("status",false)
+
+
+        masterSWITCH.setOnCheckedChangeListener { buttonView, isChecked ->
+            sharePreference.edit().putBoolean("status",isChecked).apply()
+
+            val serviceIntent=Intent(this,UsbService::class.java)
+            serviceIntent.action="SEND_DATA"
             if (isChecked) {
-
                 serviceIntent.putExtra("message","T:5:G:G:1")
-
             } else {
                 serviceIntent.putExtra("message","T:5:G:G:0")
             }
@@ -89,9 +99,32 @@ lateinit var mUsbService:UsbService
 
                     }
 
-                    "Set Date"->{
-                        Toast.makeText(this@DashBoardActivity,"Set Date",Toast.LENGTH_SHORT).show()
+                    "Set Date" -> {
+////                        val datePicker = MaterialDatePicker.Builder.dateRangePicker()
+////                            .setSelection(Pair(System.currentTimeMillis(), System.currentTimeMillis()))
+////                            .build()
+////
+////                        datePicker.addOnPositiveButtonClickListener { selection ->
+////                            val startDateInMillis = selection.first
+////                            val endDateInMillis = selection.second
+////
+////                            // Convert milliseconds to LocalDate properly
+////                            val startDate1 = LocalDateTime.ofInstant(Instant.ofEpochMilli(startDateInMillis), ZoneId.systemDefault()).toLocalDate().toString()
+////                            val endDate1 = LocalDateTime.ofInstant(Instant.ofEpochMilli(endDateInMillis), ZoneId.systemDefault()).toLocalDate().toString()
+////
+////                            Log.i("Set Date", "Start Date: $startDate1, End Date: $endDate1")
+//
+//                            startDate = startDate1
+//                            endDate = endDate1
+//                        }
+//
+//                        datePicker.show(supportFragmentManager, "date_range_picker")
+
+                        startDate="2024-11-11"
+                        endDate="2024-11-12"
+
                     }
+
 
                     "Weekly"->{
                         Toast.makeText(this@DashBoardActivity,"Weekly",Toast.LENGTH_SHORT).show()
