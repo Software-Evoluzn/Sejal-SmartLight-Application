@@ -2,6 +2,7 @@ package com.example.etcdynamiclight
 
 import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.os.Build
 import android.widget.Toast
@@ -17,10 +18,17 @@ class AlarmReceiver: BroadcastReceiver() {
         else
             "T:5:G:G:0"  //stop the device
 
+        val sharedPreferences=context?.getSharedPreferences("switchSharePreference",MODE_PRIVATE)
+        sharedPreferences?.edit()?.putBoolean("status",action=="ON_ALARM")?.apply()
+
         val serviceIntent=Intent(context,UsbService::class.java)
         serviceIntent.action="SEND_DATA"
         serviceIntent.putExtra("message",messege)
         context?.startService(serviceIntent)
+
+        val uiUpdateIntent=Intent("com.example.update_master_switch")
+        uiUpdateIntent.putExtra("status",action=="ON_ALARM")
+        context?.sendBroadcast(uiUpdateIntent)
 
 
 

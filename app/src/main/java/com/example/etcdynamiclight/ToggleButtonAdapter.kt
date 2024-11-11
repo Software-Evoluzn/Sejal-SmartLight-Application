@@ -17,33 +17,32 @@ class ToggleButtonAdapter(private val mList:ArrayList<ContactModel>,private val 
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val contactModel:ContactModel=mList.get(position)
-        val sharedPreferences=holder.itemView.context.getSharedPreferences("TogglePrefrences",Context.MODE_PRIVATE)
-        val isChecked=sharedPreferences.getBoolean("${contactModel.device_id}_checked",false)
-        val textColor=sharedPreferences.getInt("${contactModel.device_id}_color",Color.BLACK)
+        val contactModel = mList[position]
+        val sharedPreferences = holder.itemView.context.getSharedPreferences("TogglePreferences", Context.MODE_PRIVATE)
 
-        holder.toggleButtons.isChecked=isChecked
-          holder.toggleButtons.text = contactModel.device_id
+        // Set toggle button state based on saved preference
+        val isChecked = sharedPreferences.getBoolean("${contactModel.device_id}_checked", false)
+        val textColor = sharedPreferences.getInt("${contactModel.device_id}_color", Color.BLACK)
+
+        holder.toggleButtons.isChecked = isChecked
+        holder.toggleButtons.text = contactModel.device_id
         holder.toggleButtons.setTextColor(textColor)
 
-
-        holder.toggleButtons.setOnCheckedChangeListener { buttonView, isChecked ->
-
-            val newColor=if(isChecked) Color.WHITE else Color.BLACK
+        // Handle toggle button changes
+        holder.toggleButtons.setOnCheckedChangeListener { _, isChecked ->
+            val newColor = if (isChecked) Color.WHITE else Color.BLACK
             holder.toggleButtons.setTextColor(newColor)
 
-
-
-            with(sharedPreferences.edit()){
-                putBoolean("${contactModel.device_id}_checked",isChecked)
-                putInt("${contactModel.device_id}_color",textColor)
+            // Save toggle state and color in SharedPreferences
+            with(sharedPreferences.edit()) {
+                putBoolean("${contactModel.device_id}_checked", isChecked)
+                putInt("${contactModel.device_id}_color", newColor)
                 apply()
-
             }
 
-            val command=if(isChecked) "1" else "0"
-            mUsbHandler.sendData(contactModel.device_id+command)
-
+            // Send data via USBHandler based on toggle state
+            val command = if (isChecked) "1" else "0"
+            mUsbHandler.sendData("${contactModel.device_id}$command")
         }
     }
 

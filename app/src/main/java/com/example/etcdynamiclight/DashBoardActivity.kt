@@ -1,7 +1,10 @@
 package com.example.etcdynamiclight
 
 
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -63,6 +66,19 @@ class DashBoardActivity : AppCompatActivity() {
         val sharePreference=getSharedPreferences("switchSharePreference", MODE_PRIVATE)
         masterSWITCH.isChecked=sharePreference.getBoolean("status",false)
 
+        val filter=IntentFilter("com.example.update_master_switch")
+
+
+
+        val masterSwitchReceiver=object :BroadcastReceiver(){
+            override fun onReceive(context: Context?, intent: Intent?) {
+                val status = intent?.getBooleanExtra("status", false) ?: false
+                masterSWITCH.isChecked = status
+            }
+
+        }
+        registerReceiver(masterSwitchReceiver,filter)
+
 
         masterSWITCH.setOnCheckedChangeListener { buttonView, isChecked ->
             sharePreference.edit().putBoolean("status",isChecked).apply()
@@ -75,6 +91,7 @@ class DashBoardActivity : AppCompatActivity() {
                 serviceIntent.putExtra("message","T:5:G:G:0")
             }
              startService(serviceIntent)
+
         }
 
         val arrSpinner= arrayOf("Select item","Today","Set Date","Weekly")
@@ -191,5 +208,8 @@ class DashBoardActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         mUsbHandler.unRegisterReceiver()
+
+
     }
+
 }

@@ -42,11 +42,10 @@ class UsbService : Service() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if(intent?.action=="SEND_DATA") {
-            println("send data")
+
             val message = intent.getStringExtra("message")
-            println("messege")
             if (message != null) {
-                println("messege is not null")
+
                 sendDataToUsbHandler(message)
             }
         }
