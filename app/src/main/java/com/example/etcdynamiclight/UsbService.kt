@@ -27,7 +27,12 @@ class UsbService : Service() {
 
     override fun onCreate() {
         super.onCreate()
-        mUSBHandler= USBHandler(this)
+
+
+            mUSBHandler= USBHandler(this)
+
+
+
         //createNotificationChannel()
 
 
