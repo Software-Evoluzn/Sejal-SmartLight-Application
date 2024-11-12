@@ -1,7 +1,9 @@
 package com.example.etcdynamiclight
 
+import android.content.BroadcastReceiver
 import android.content.Context
-import android.content.SharedPreferences
+import android.content.Intent
+import android.content.IntentFilter
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
@@ -9,8 +11,12 @@ import android.view.ViewGroup
 import android.widget.ToggleButton
 import androidx.recyclerview.widget.RecyclerView
 
-class ToggleButtonAdapter(private val mList:ArrayList<ContactModel>,private val mUsbHandler:USBHandler):
+class ToggleButtonAdapter(private val mList:ArrayList<ContactModel>,
+                          private val mUsbHandler:USBHandler,
+                          ):
     RecyclerView.Adapter<ToggleButtonAdapter.ViewHolder>(){
+
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view=LayoutInflater.from(parent.context).inflate(R.layout.list_item,parent,false)
         return ViewHolder(view)
@@ -46,15 +52,22 @@ class ToggleButtonAdapter(private val mList:ArrayList<ContactModel>,private val 
         }
     }
 
+
+
+
+
     override fun getItemCount(): Int {
        return mList.size
     }
+
+
 
     class ViewHolder(ItemView:View): RecyclerView.ViewHolder(ItemView) {
         var toggleButtons:ToggleButton=itemView.findViewById(R.id.toggleButton)
 
 
     }
+
 
 
 }

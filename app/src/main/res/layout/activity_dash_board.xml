@@ -189,9 +189,9 @@
                 android:id="@+id/setDateRange"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
                 android:textColor="#0C0C0C"
                 android:textSize="12sp"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="@+id/spinnerDay"
                 app:layout_constraintStart_toStartOf="@+id/spinnerDay"
                 app:layout_constraintTop_toBottomOf="@+id/spinnerDay" />

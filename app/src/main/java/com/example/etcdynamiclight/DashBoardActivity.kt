@@ -12,9 +12,11 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.SwitchCompat
@@ -68,8 +70,6 @@ class DashBoardActivity : AppCompatActivity() {
 
         val filter=IntentFilter("com.example.update_master_switch")
 
-
-
         val masterSwitchReceiver=object :BroadcastReceiver(){
             override fun onReceive(context: Context?, intent: Intent?) {
                 val status = intent?.getBooleanExtra("status", false) ?: false
@@ -110,8 +110,9 @@ class DashBoardActivity : AppCompatActivity() {
                         val current =LocalDate.now()
                         startDate= current.toString()
                         endDate=current.toString()
-                        println("start data : $startDate and end data : $endDate")
-                        Log.i("today date","date $startDate and $endDate")
+                        val setDateRange: TextView =findViewById(R.id.setDateRange)
+                        setDateRange.text = startDate+ " to " +endDate
+
 
 
                     }
@@ -159,7 +160,8 @@ class DashBoardActivity : AppCompatActivity() {
         OnTimeButton.setOnClickListener{
             timeAndDatePicker.OpenTimePickerDialog { selectTime->
                 OnTime=selectTime
-                Log.i("onTime","on time : $OnTime")
+                OnTimeButton.setText(OnTime)
+
             }
 
         }
@@ -168,7 +170,8 @@ class DashBoardActivity : AppCompatActivity() {
         OffTimeButton.setOnClickListener{
             timeAndDatePicker.OpenTimePickerDialog {selectTime->
                 OffTime=selectTime
-                Log.i("Off time","OffTime : $OffTime")
+                OffTimeButton.setText(OffTime)
+
 
             }
 
@@ -199,6 +202,18 @@ class DashBoardActivity : AppCompatActivity() {
             }
 
             setAlarmFromDatabase.fetchDataFromDataBase(fetchingScheduleData,this)
+            val alertDialog=AlertDialog.Builder(this)
+            alertDialog.setIcon(R.drawable.logos1)
+            alertDialog.setTitle("Evoluzn")
+            alertDialog.setMessage("Alarm Schedule!")
+
+            alertDialog.show()
+
+
+
+
+
+
 
 
         }

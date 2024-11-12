@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 class MainActivity : AppCompatActivity() {
     lateinit var mDbHelpher:DBHelpher
     lateinit var mUsbHandler:USBHandler
+   private lateinit var toggleButtonAdapter:ToggleButtonAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,10 +21,13 @@ class MainActivity : AppCompatActivity() {
 
         insertData()
 
+
+
         val deviceList=mDbHelpher.fetchData()
         val recyclerView: RecyclerView =findViewById(R.id.ButtonRecyclerView)
+        toggleButtonAdapter=ToggleButtonAdapter(deviceList,mUsbHandler,this)
         recyclerView.layoutManager=GridLayoutManager(this,3)
-        val adapter=ToggleButtonAdapter(deviceList,mUsbHandler)
+        val adapter=toggleButtonAdapter
         recyclerView.adapter=adapter
 
 
@@ -50,5 +54,16 @@ class MainActivity : AppCompatActivity() {
         mDbHelpher.RegisterUserHelpher(10, "T:5:3:2:")
         mDbHelpher.RegisterUserHelpher(11, "T:5:3:3:")
         mDbHelpher.RegisterUserHelpher(12, "T:5:3:4:")
+    }
+
+    override fun onStart() {
+        super.onStart()
+        toggleButtonAdapter.registerReceiver()
+
+    }
+
+    override fun onStop() {
+        super.onStop()
+        toggleButtonAdapter.unregisterReceiver()
     }
 }
