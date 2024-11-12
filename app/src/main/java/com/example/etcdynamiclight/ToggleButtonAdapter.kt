@@ -11,9 +11,7 @@ import android.view.ViewGroup
 import android.widget.ToggleButton
 import androidx.recyclerview.widget.RecyclerView
 
-class ToggleButtonAdapter(private val mList:ArrayList<ContactModel>,
-                          private val mUsbHandler:USBHandler,
-                          ):
+class ToggleButtonAdapter(private val mList:ArrayList<ContactModel>,private val mUsbHandler:USBHandler):
     RecyclerView.Adapter<ToggleButtonAdapter.ViewHolder>(){
 
 
@@ -51,23 +49,10 @@ class ToggleButtonAdapter(private val mList:ArrayList<ContactModel>,
             mUsbHandler.sendData("${contactModel.device_id}$command")
         }
     }
-
-
-
-
-
     override fun getItemCount(): Int {
        return mList.size
     }
-
-
-
     class ViewHolder(ItemView:View): RecyclerView.ViewHolder(ItemView) {
         var toggleButtons:ToggleButton=itemView.findViewById(R.id.toggleButton)
-
-
     }
-
-
-
-}
+    }

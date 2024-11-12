@@ -21,22 +21,15 @@ class MainActivity : AppCompatActivity() {
 
         insertData()
 
-
-
         val deviceList=mDbHelpher.fetchData()
         val recyclerView: RecyclerView =findViewById(R.id.ButtonRecyclerView)
         toggleButtonAdapter=ToggleButtonAdapter(deviceList,mUsbHandler)
         recyclerView.layoutManager=GridLayoutManager(this,3)
         val adapter=toggleButtonAdapter
         recyclerView.adapter=adapter
-
-
     }
 
     private fun insertData() {
-
-
-
         //device1
         mDbHelpher.RegisterUserHelpher(1, "T:5:1:1:")
         mDbHelpher.RegisterUserHelpher(2, "T:5:1:2:")
@@ -55,6 +48,4 @@ class MainActivity : AppCompatActivity() {
         mDbHelpher.RegisterUserHelpher(11, "T:5:3:3:")
         mDbHelpher.RegisterUserHelpher(12, "T:5:3:4:")
     }
-
-
 }

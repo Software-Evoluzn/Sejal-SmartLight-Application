@@ -18,8 +18,6 @@ class AlarmReceiver: BroadcastReceiver() {
         else
             "T:5:G:G:0"  //stop the device
 
-        val sharedPreferences=context?.getSharedPreferences("switchSharePreference",MODE_PRIVATE)
-        sharedPreferences?.edit()?.putBoolean("status",action=="ON_ALARM")?.apply()
 
         val serviceIntent=Intent(context,UsbService::class.java)
         serviceIntent.action="SEND_DATA"
@@ -29,8 +27,5 @@ class AlarmReceiver: BroadcastReceiver() {
         val uiUpdateIntent=Intent("com.example.update_master_switch")
         uiUpdateIntent.putExtra("status",action=="ON_ALARM")
         context?.sendBroadcast(uiUpdateIntent)
-
-
-
     }
 }

@@ -9,25 +9,18 @@ import com.google.android.material.timepicker.TimeFormat
 class ShowingDataAndTimePicker(private var context: Context,private val fragmentManager:FragmentManager) {
 
     fun OpenTimePickerDialog(onTimeSelected: (String)->Unit ){
-
-
         val materialTimePicker: MaterialTimePicker = MaterialTimePicker.Builder()
             .setTitleText("SELECT YOUR TIMING")
             .setHour(12)
             .setMinute(10)
             .setTimeFormat(TimeFormat.CLOCK_12H)
             .build()
-
         materialTimePicker.show(fragmentManager, "MainActivity")
-
-
         materialTimePicker.addOnPositiveButtonClickListener {
-
             val pickedHour: Int = materialTimePicker.hour
             val pickedMinute: Int = materialTimePicker.minute
 
-
-         val   formattedTime = when {
+            val   formattedTime = when {
                 pickedHour > 12 -> {
                     if (pickedMinute < 10) {
                         "${materialTimePicker.hour - 12}:0${materialTimePicker.minute} pm"
@@ -56,18 +49,11 @@ class ShowingDataAndTimePicker(private var context: Context,private val fragment
                         "${materialTimePicker.hour}:${materialTimePicker.minute} am"
                     }
                 }
-
-
             }
             Log.i("formatted time","formattedTime : $formattedTime")
 
             //trigger the call back with the formatted time
             onTimeSelected(formattedTime)
-
-
         }
-
     }
-
-
 }

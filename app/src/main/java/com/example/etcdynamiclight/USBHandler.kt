@@ -61,9 +61,7 @@ class USBHandler(private  val context:Context){
 
 
     init {
-
         context.registerReceiver(broadcastReceiver, filter)
-
         //automatically start UsbConnection
         startUsbConnection()
     }
@@ -110,11 +108,7 @@ class USBHandler(private  val context:Context){
         Log.i("UsbHelper", "Data received: $dataStr")
         // Add code here to handle data if needed, like updating a UI component
     }
-
-
     fun unRegisterReceiver(){
         context.unregisterReceiver(broadcastReceiver)
     }
-
-
 }

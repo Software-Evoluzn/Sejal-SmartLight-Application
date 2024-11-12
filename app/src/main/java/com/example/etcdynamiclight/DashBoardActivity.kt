@@ -95,9 +95,6 @@ class DashBoardActivity : AppCompatActivity() {
         val arrSpinner= arrayOf("Select item","Today","Set Date")
         val arrayAdapter=ArrayAdapter(this,android.R.layout.simple_list_item_1,arrSpinner)
         spinnerDay.adapter=arrayAdapter
-
-
-
         spinnerDay.onItemSelectedListener=object:AdapterView.OnItemSelectedListener{
             @RequiresApi(Build.VERSION_CODES.O)
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
@@ -110,29 +107,18 @@ class DashBoardActivity : AppCompatActivity() {
                         endDate = current.toString()
                         val setDateRange: TextView = findViewById(R.id.setDateRange)
                         setDateRange.text = startDate + " to " + endDate
-
                     }
-
                     "Set Date" -> {
                        val dateRangePicker = MaterialDatePicker.Builder.dateRangePicker()
                             .setTitleText("Select Start Date and End Date")
                             .build()
-
-                        // Show the picker
                         dateRangePicker.show(supportFragmentManager, "date_range_picker")
-
-                        // Handle positive button click (when dates are selected)
                         dateRangePicker.addOnPositiveButtonClickListener { datePicked ->
-                            // Retrieve start and end dates in milliseconds
                             val startDateMillis = datePicked.first
                             val endDateMillis = datePicked.second
-
-                            // Format dates as strings
                             val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
                             startDate = dateFormat.format(Date(startDateMillis))
                             endDate = dateFormat.format(Date(endDateMillis))
-
-                            // Display the selected date range
                             val setDateRange: TextView = findViewById(R.id.setDateRange)
                             setDateRange.text = "$startDate to $endDate"
                         }
@@ -149,9 +135,7 @@ class DashBoardActivity : AppCompatActivity() {
             timeAndDatePicker.OpenTimePickerDialog { selectTime->
                 OnTime=selectTime
                 OnTimeButton.setText(OnTime)
-
             }
-
         }
 
         val OffTimeButton:AppCompatButton=findViewById(R.id.SelectOfTime)
@@ -159,14 +143,10 @@ class DashBoardActivity : AppCompatActivity() {
             timeAndDatePicker.OpenTimePickerDialog {selectTime->
                 OffTime=selectTime
                 OffTimeButton.setText(OffTime)
-
-
             }
-
         }
 
         val scheduleButton:AppCompatButton=findViewById(R.id.ScheduleButton)
-
         scheduleButton.setOnClickListener{
             if(startDate.isNotEmpty() && endDate.isNotEmpty()) {
                 if(OnTime.isNotEmpty() && OffTime.isNotEmpty()) {
@@ -211,8 +191,6 @@ class DashBoardActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         mUsbHandler.unRegisterReceiver()
-
-
     }
 
 }

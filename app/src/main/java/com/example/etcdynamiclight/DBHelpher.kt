@@ -36,15 +36,12 @@ class DBHelpher(context: Context,factory:SQLiteDatabase.CursorFactory?):
         val schedule_query="CREATE TABLE $tableSchedule($scheduling_Sr_No INTEGER PRIMARY KEY AUTOINCREMENT,$scheduling_everyDay TEXT,$scheduling_startDate TEXT,$scheduling_endDate TEXT,$scheduling_startTime TEXT,$scheduling_endTime TEXT,$scheduling_value TEXT)"
         db.execSQL(devices_query)
         db.execSQL(schedule_query)
-
-
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         db.execSQL("DROP TABLE IF EXISTS $tableName")
         db.execSQL("DROP TABLE IF EXISTS $tableSchedule")
         onCreate(db)
-
     }
 
     fun ScheduleRegistration(sch_everyday:String,sDate:String,eDate:String,sTime:String,eTime:String,sch_value:String){
@@ -56,17 +53,11 @@ class DBHelpher(context: Context,factory:SQLiteDatabase.CursorFactory?):
             put(scheduling_startTime,sTime)
             put(scheduling_endTime,eTime)
             put(scheduling_value,sch_value)
-
-
         }
-
         db.insert(tableSchedule,null,contentValues)
         db.close()
 
     }
-
-
-
     fun RegisterUserHelpher(srNo:Int,device_id:String){
         val db=this.writableDatabase
         val cursor=db.rawQuery("SELECT * FROM $tableName WHERE $srNo_col=?" , arrayOf(srNo.toString()))
@@ -80,10 +71,7 @@ class DBHelpher(context: Context,factory:SQLiteDatabase.CursorFactory?):
              db.update(tableName,contentValues, "Sr_No=?", arrayOf(srNo.toString()))
          }
         db.close()
-
     }
-
-
     fun fetchSchedulingData():ArrayList<ScheduleModel>{
         val db=this.readableDatabase
         val fetchQuery="SELECT * FROM $tableSchedule ORDER BY $scheduling_Sr_No DESC LIMIT 1"
@@ -97,16 +85,12 @@ class DBHelpher(context: Context,factory:SQLiteDatabase.CursorFactory?):
                 sch_sTime=cursor.getString(4)
                 sch_eTime=cursor.getString(5)
                 sch_value=cursor.getString(6)
-
-
             }
             arrContacts.add(scheduleModel)
-
         }
         cursor.close()
         return arrContacts
     }
-
     fun fetchData():ArrayList<ContactModel>{
         val db=this.readableDatabase
         val fetchQuery="SELECT * FROM $tableName"

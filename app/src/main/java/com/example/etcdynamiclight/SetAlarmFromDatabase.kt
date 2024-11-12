@@ -20,21 +20,19 @@ class SetAlarmFromDatabase {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
         for (models in fetchingScheduleData) {
-            // Parse dates and times
             val startDate = dateFormat.parse(models.sch_sDate)
             val endDate = dateFormat.parse(models.sch_eDate)
             val startTime = timeFormat.parse(models.sch_sTime)
             val endTime = timeFormat.parse(models.sch_eTime)
 
-            // Check if parsing was successful
+
             if (startDate != null && endDate != null && startTime != null && endTime != null) {
                 val calendar = Calendar.getInstance()
-
-                // Loop through each day between start and end date
                 var currentDate = startDate
                 while (!currentDate .after(endDate)) {
-                        // Set alarm at start time
                         calendar.time = currentDate
+
+                        //start time alarm
                         calendar.set(Calendar.HOUR_OF_DAY, startTime.hours)
                         calendar.set(Calendar.MINUTE, startTime.minutes)
                         calendar.set(Calendar.SECOND, 0)
@@ -46,10 +44,9 @@ class SetAlarmFromDatabase {
                         val startPendingIntent = PendingIntent.getBroadcast(context, System.currentTimeMillis().toInt(), startIntent, PendingIntent.FLAG_UPDATE_CURRENT)
                         alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, startPendingIntent)
 
-                        // Set alarm at end time
+                        //end time alarm
                         calendar.set(Calendar.HOUR_OF_DAY, endTime.hours)
                         calendar.set(Calendar.MINUTE, endTime.minutes)
-
                         val endIntent = Intent(context, AlarmReceiver::class.java).apply {
                             action="OFF_ALARM"
                             putExtra("message", "T:5:G:G:0")
