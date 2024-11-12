@@ -1,13 +1,14 @@
-package com.example.etcdynamiclight
+package com.example.etcdynamiclight.databaseClass
 
 import android.content.ContentValues
 import android.content.Context
-import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import com.example.etcdynamiclight.modelClass.ContactModel
+import com.example.etcdynamiclight.modelClass.ScheduleModel
 
 class DBHelpher(context: Context,factory:SQLiteDatabase.CursorFactory?):
-    SQLiteOpenHelper(context,DATABASE_NAME,factory,DATABASE_VERSION) {
+    SQLiteOpenHelper(context, DATABASE_NAME,factory, DATABASE_VERSION) {
 
         companion object{
             private val DATABASE_NAME="Lights"
@@ -78,7 +79,7 @@ class DBHelpher(context: Context,factory:SQLiteDatabase.CursorFactory?):
         val cursor=db.rawQuery(fetchQuery,null)
         val arrContacts=ArrayList<ScheduleModel>()
         while(cursor.moveToNext()){
-            val scheduleModel=ScheduleModel().apply {
+            val scheduleModel= ScheduleModel().apply {
                 sch_everyDay=cursor.getString(1)
                 sch_sDate=cursor.getString(2)
                 sch_eDate=cursor.getString(3)
@@ -97,7 +98,7 @@ class DBHelpher(context: Context,factory:SQLiteDatabase.CursorFactory?):
         val cursor=db.rawQuery(fetchQuery,null)
         val arrContacts= ArrayList<ContactModel>()
         while(cursor.moveToNext()){
-            val contact=ContactModel().apply{
+            val contact= ContactModel().apply{
                 Sr_No=cursor.getInt(0)
                 device_id=cursor.getString(1)
             }

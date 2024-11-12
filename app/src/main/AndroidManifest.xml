@@ -10,10 +10,6 @@
 
 
 
-
-
-
-
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -25,7 +21,7 @@
         android:theme="@style/Theme.ETCDynamicLight"
         tools:targetApi="31">
         <activity
-            android:name=".DashBoardActivity"
+            android:name=".activityFolder.DashBoardActivity"
             android:exported="true" >
             <intent-filter>
             <action android:name="android.intent.action.MAIN" />
@@ -33,11 +29,11 @@
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter></activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".activityFolder.MainActivity"
             android:exported="true">
 
         </activity>
-        <receiver android:name=".AlarmBootReceiver"
+        <receiver android:name=".ReceiverClass.AlarmBootReceiver"
             android:enabled="false"
             android:exported="true">
             <intent-filter>
@@ -45,10 +41,12 @@
             </intent-filter>
         </receiver>
 
-        <receiver android:name=".AlarmReceiver" />
-        <service android:name=".UsbService" android:enabled="true" android:exported="false"/>
-        <service android:name=".UsbConnectionService"
+        <receiver android:name=".ReceiverClass.AlarmReceiver" />
+
+        <service android:name=".serviceClassFolder.UsbService" android:enabled="true" android:exported="false"/>
+        <service android:name=".serviceClassFolder.UsbConnectionService"
             android:exported="false"
+            android:enabled="true"
             android:foregroundServiceType="connectedDevice"
             />
 

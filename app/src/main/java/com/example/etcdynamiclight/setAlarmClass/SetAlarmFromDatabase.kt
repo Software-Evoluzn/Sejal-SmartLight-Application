@@ -1,13 +1,14 @@
-package com.example.etcdynamiclight
+package com.example.etcdynamiclight.setAlarmClass
 
 import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import com.example.etcdynamiclight.ReceiverClass.AlarmReceiver
+import com.example.etcdynamiclight.modelClass.ScheduleModel
 import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Date
 import java.util.Locale
 
 class SetAlarmFromDatabase {

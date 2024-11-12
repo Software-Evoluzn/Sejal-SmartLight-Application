@@ -1,4 +1,4 @@
-package com.example.etcdynamiclight
+package com.example.etcdynamiclight.activityFolder
 
 
 import android.content.BroadcastReceiver
@@ -20,6 +20,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.SwitchCompat
 import androidx.cardview.widget.CardView
+import com.example.etcdynamiclight.R
+import com.example.etcdynamiclight.databaseClass.DBHelpher
+import com.example.etcdynamiclight.deviceConnectionclass.USBHandler
+import com.example.etcdynamiclight.serviceClassFolder.UsbService
+import com.example.etcdynamiclight.setAlarmClass.SetAlarmFromDatabase
+import com.example.etcdynamiclight.setAlarmClass.ShowingDataAndTimePicker
 import com.google.android.material.datepicker.MaterialDatePicker
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -32,16 +38,16 @@ class DashBoardActivity : AppCompatActivity() {
 
     lateinit var masterSWITCH: SwitchCompat
     lateinit var masterSwitchCardView: CardView
-    lateinit var  mUsbHandler:USBHandler
-    lateinit var mUsbService:UsbService
+    lateinit var  mUsbHandler: USBHandler
+    lateinit var mUsbService: UsbService
     lateinit var spinnerDay:Spinner
-    lateinit var timeAndDatePicker:ShowingDataAndTimePicker
+    lateinit var timeAndDatePicker: ShowingDataAndTimePicker
     lateinit var OnTime:String
     lateinit var OffTime:String
     lateinit var startDate:String
     lateinit var endDate:String
-    lateinit var mDbHelpher:DBHelpher
-    lateinit var setAlarmFromDatabase:SetAlarmFromDatabase
+    lateinit var mDbHelpher: DBHelpher
+    lateinit var setAlarmFromDatabase: SetAlarmFromDatabase
     lateinit var setDateRange:TextView
     lateinit var OnTimeButton:AppCompatButton
     lateinit var OffTimeButton:AppCompatButton
@@ -58,13 +64,13 @@ class DashBoardActivity : AppCompatActivity() {
 
 
          mUsbHandler = USBHandler(this)
-         mDbHelpher=DBHelpher(this,null)
+         mDbHelpher= DBHelpher(this,null)
          setAlarmFromDatabase= SetAlarmFromDatabase()
          masterSWITCH = findViewById(R.id.MasterSwitch)
          masterSwitchCardView = findViewById(R.id.cardMasterSwitch)
          spinnerDay=findViewById(R.id.spinnerDay)
-         timeAndDatePicker=ShowingDataAndTimePicker(this,supportFragmentManager)
-         mUsbService=UsbService()
+         timeAndDatePicker= ShowingDataAndTimePicker(this,supportFragmentManager)
+         mUsbService= UsbService()
         setDateRange=findViewById(R.id.setDateRange)
          OnTimeButton=findViewById(R.id.selectOnTime)
          OffTimeButton=findViewById(R.id.SelectOfTime)
@@ -114,7 +120,7 @@ class DashBoardActivity : AppCompatActivity() {
         masterSWITCH.setOnCheckedChangeListener { buttonView, isChecked ->
             sharePreference.edit().putBoolean("status",isChecked).apply()
 
-            val serviceIntent=Intent(this,UsbService::class.java)
+            val serviceIntent=Intent(this, UsbService::class.java)
             serviceIntent.action="SEND_DATA"
             if (isChecked) {
                 serviceIntent.putExtra("message","T:5:G:G:1")

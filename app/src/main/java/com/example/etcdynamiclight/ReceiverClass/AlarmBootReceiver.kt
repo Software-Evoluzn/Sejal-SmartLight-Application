@@ -1,25 +1,28 @@
-package com.example.etcdynamiclight
+package com.example.etcdynamiclight.ReceiverClass
 
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.annotation.RequiresApi
+import com.example.etcdynamiclight.databaseClass.DBHelpher
+import com.example.etcdynamiclight.setAlarmClass.SetAlarmFromDatabase
+import com.example.etcdynamiclight.serviceClassFolder.UsbConnectionService
 
 class AlarmBootReceiver:BroadcastReceiver() {
 
-    lateinit var setAlarmFromDatabase:SetAlarmFromDatabase
+    lateinit var setAlarmFromDatabase: SetAlarmFromDatabase
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onReceive(context: Context?, intent: Intent?) {
         if(Intent.ACTION_BOOT_COMPLETED==intent?.action) {
             val mDbHelpher= context?.let { DBHelpher(it,null) }
             val fetchDataList=mDbHelpher?.fetchSchedulingData()
-            val setAlarmFromDatabase=SetAlarmFromDatabase()
+            val setAlarmFromDatabase= SetAlarmFromDatabase()
             if (fetchDataList != null) {
                 setAlarmFromDatabase.fetchDataFromDataBase(fetchDataList,context)
             }
 
-            val serviceIntent=Intent(context,UsbConnectionService::class.java)
+            val serviceIntent=Intent(context, UsbConnectionService::class.java)
             context?.startForegroundService(serviceIntent)
 
 

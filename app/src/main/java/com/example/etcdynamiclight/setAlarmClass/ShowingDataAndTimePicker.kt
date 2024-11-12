@@ -1,4 +1,4 @@
-package com.example.etcdynamiclight
+package com.example.etcdynamiclight.setAlarmClass
 
 import android.content.Context
 import android.util.Log

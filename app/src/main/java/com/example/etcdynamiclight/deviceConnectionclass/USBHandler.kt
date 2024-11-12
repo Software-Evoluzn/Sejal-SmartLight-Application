@@ -1,4 +1,4 @@
-package com.example.etcdynamiclight
+package com.example.etcdynamiclight.deviceConnectionclass
 
 import android.app.PendingIntent
 import android.content.BroadcastReceiver

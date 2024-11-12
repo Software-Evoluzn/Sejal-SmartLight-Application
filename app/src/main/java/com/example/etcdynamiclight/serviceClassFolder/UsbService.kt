@@ -1,4 +1,4 @@
-package com.example.etcdynamiclight
+package com.example.etcdynamiclight.serviceClassFolder
 
 
 import android.app.Service
@@ -8,11 +8,11 @@ import android.os.IBinder
 import android.os.Looper
 import android.util.Log
 import androidx.annotation.RequiresApi
-
+import com.example.etcdynamiclight.deviceConnectionclass.USBHandler
 
 
 class UsbService : Service() {
-    private lateinit var mUSBHandler:USBHandler
+    private lateinit var mUSBHandler: USBHandler
 
     override fun onCreate() {
         super.onCreate()

@@ -1,17 +1,17 @@
-package com.example.etcdynamiclight
+package com.example.etcdynamiclight.adapterClass
 
-import android.content.BroadcastReceiver
 import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ToggleButton
 import androidx.recyclerview.widget.RecyclerView
+import com.example.etcdynamiclight.R
+import com.example.etcdynamiclight.deviceConnectionclass.USBHandler
+import com.example.etcdynamiclight.modelClass.ContactModel
 
-class ToggleButtonAdapter(private val mList:ArrayList<ContactModel>,private val mUsbHandler:USBHandler):
+class ToggleButtonAdapter(private val mList:ArrayList<ContactModel>, private val mUsbHandler: USBHandler):
     RecyclerView.Adapter<ToggleButtonAdapter.ViewHolder>(){
 
 

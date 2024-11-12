@@ -1,29 +1,32 @@
-package com.example.etcdynamiclight
+package com.example.etcdynamiclight.activityFolder
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.etcdynamiclight.R
+import com.example.etcdynamiclight.adapterClass.ToggleButtonAdapter
+import com.example.etcdynamiclight.databaseClass.DBHelpher
+import com.example.etcdynamiclight.deviceConnectionclass.USBHandler
 
 class MainActivity : AppCompatActivity() {
-    lateinit var mDbHelpher:DBHelpher
-    lateinit var mUsbHandler:USBHandler
-   private lateinit var toggleButtonAdapter:ToggleButtonAdapter
+    lateinit var mDbHelpher: DBHelpher
+    lateinit var mUsbHandler: USBHandler
+   private lateinit var toggleButtonAdapter: ToggleButtonAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
-        mDbHelpher=DBHelpher(this,null)
-        mUsbHandler=USBHandler(this)
+        mDbHelpher= DBHelpher(this,null)
+        mUsbHandler= USBHandler(this)
 
         insertData()
 
         val deviceList=mDbHelpher.fetchData()
         val recyclerView: RecyclerView =findViewById(R.id.ButtonRecyclerView)
-        toggleButtonAdapter=ToggleButtonAdapter(deviceList,mUsbHandler)
+        toggleButtonAdapter= ToggleButtonAdapter(deviceList,mUsbHandler)
         recyclerView.layoutManager=GridLayoutManager(this,3)
         val adapter=toggleButtonAdapter
         recyclerView.adapter=adapter

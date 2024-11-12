@@ -1,4 +1,4 @@
-package com.example.etcdynamiclight
+package com.example.etcdynamiclight.modelClass
 
 class ScheduleModel {
     lateinit var sch_everyDay:String
