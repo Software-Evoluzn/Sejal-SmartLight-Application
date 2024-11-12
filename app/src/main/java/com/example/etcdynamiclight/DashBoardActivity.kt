@@ -42,6 +42,9 @@ class DashBoardActivity : AppCompatActivity() {
     lateinit var endDate:String
     lateinit var mDbHelpher:DBHelpher
     lateinit var setAlarmFromDatabase:SetAlarmFromDatabase
+    lateinit var setDateRange:TextView
+    lateinit var OnTimeButton:AppCompatButton
+    lateinit var OffTimeButton:AppCompatButton
 
 
 
@@ -49,6 +52,11 @@ class DashBoardActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_dash_board)
+
+
+        val sharePreference=getSharedPreferences("switchSharePreference", MODE_PRIVATE)
+
+
          mUsbHandler = USBHandler(this)
          mDbHelpher=DBHelpher(this,null)
          setAlarmFromDatabase= SetAlarmFromDatabase()
@@ -57,13 +65,38 @@ class DashBoardActivity : AppCompatActivity() {
          spinnerDay=findViewById(R.id.spinnerDay)
          timeAndDatePicker=ShowingDataAndTimePicker(this,supportFragmentManager)
          mUsbService=UsbService()
+        setDateRange=findViewById(R.id.setDateRange)
+         OnTimeButton=findViewById(R.id.selectOnTime)
+         OffTimeButton=findViewById(R.id.SelectOfTime)
+
+        //set the dange range
+        val saveStartDate=sharePreference.getString("startDate","")
+        val saveEndDate=sharePreference.getString("endDate","")
+
+        if(!saveStartDate.isNullOrEmpty() && !saveEndDate.isNullOrEmpty()){
+            setDateRange.setText(saveStartDate+" to "+saveEndDate)
+        }
+
+        val saveOnTime=sharePreference.getString("OnTime","")
+        val saveOffTime=sharePreference.getString("OffTime","")
+        if(!saveOnTime.isNullOrEmpty()){
+            OnTimeButton.setText(saveOnTime)
+
+        }
+
+        if(!saveOffTime.isNullOrEmpty()){
+            OffTimeButton.setText(saveOffTime)
+        }
 
          masterSwitchCardView.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
 
-        val sharePreference=getSharedPreferences("switchSharePreference", MODE_PRIVATE)
+        val editor=sharePreference.edit()
+
+
+        //set the date range
         masterSWITCH.isChecked=sharePreference.getBoolean("status",false)
 
         val filter=IntentFilter("com.example.update_master_switch")
@@ -105,8 +138,9 @@ class DashBoardActivity : AppCompatActivity() {
                         val current = LocalDate.now()
                         startDate = current.toString()
                         endDate = current.toString()
-                        val setDateRange: TextView = findViewById(R.id.setDateRange)
                         setDateRange.text = startDate + " to " + endDate
+                        editor.putString("startDate",startDate)
+                        editor.putString("endDate",endDate)
                     }
                     "Set Date" -> {
                        val dateRangePicker = MaterialDatePicker.Builder.dateRangePicker()
@@ -119,8 +153,9 @@ class DashBoardActivity : AppCompatActivity() {
                             val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
                             startDate = dateFormat.format(Date(startDateMillis))
                             endDate = dateFormat.format(Date(endDateMillis))
-                            val setDateRange: TextView = findViewById(R.id.setDateRange)
                             setDateRange.text = "$startDate to $endDate"
+                            editor.putString("startDate",startDate)
+                            editor.putString("endDate",endDate)
                         }
                     }
                 }
@@ -130,11 +165,13 @@ class DashBoardActivity : AppCompatActivity() {
             }
         }
 
-        val OnTimeButton:AppCompatButton=findViewById(R.id.selectOnTime)
+
         OnTimeButton.setOnClickListener{
             timeAndDatePicker.OpenTimePickerDialog { selectTime->
                 OnTime=selectTime
                 OnTimeButton.setText(OnTime)
+                editor.putString("OnTime",OnTime)
+                editor.apply()
             }
         }
 
@@ -143,6 +180,8 @@ class DashBoardActivity : AppCompatActivity() {
             timeAndDatePicker.OpenTimePickerDialog {selectTime->
                 OffTime=selectTime
                 OffTimeButton.setText(OffTime)
+                editor.putString("OffTime",OffTime)
+                editor.apply()
             }
         }
 
