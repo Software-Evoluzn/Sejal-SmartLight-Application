@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
 
         val deviceList=mDbHelpher.fetchData()
         val recyclerView: RecyclerView =findViewById(R.id.ButtonRecyclerView)
-        toggleButtonAdapter=ToggleButtonAdapter(deviceList,mUsbHandler,this)
+        toggleButtonAdapter=ToggleButtonAdapter(deviceList,mUsbHandler)
         recyclerView.layoutManager=GridLayoutManager(this,3)
         val adapter=toggleButtonAdapter
         recyclerView.adapter=adapter
@@ -56,14 +56,5 @@ class MainActivity : AppCompatActivity() {
         mDbHelpher.RegisterUserHelpher(12, "T:5:3:4:")
     }
 
-    override fun onStart() {
-        super.onStart()
-        toggleButtonAdapter.registerReceiver()
 
-    }
-
-    override fun onStop() {
-        super.onStop()
-        toggleButtonAdapter.unregisterReceiver()
-    }
 }

@@ -7,7 +7,6 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -22,11 +21,10 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.SwitchCompat
 import androidx.cardview.widget.CardView
 import com.google.android.material.datepicker.MaterialDatePicker
-import androidx.core.util.Pair
-import java.time.Instant
+import java.text.SimpleDateFormat
 import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.ZoneId
+import java.util.Date
+import java.util.Locale
 
 
 class DashBoardActivity : AppCompatActivity() {
@@ -94,7 +92,7 @@ class DashBoardActivity : AppCompatActivity() {
 
         }
 
-        val arrSpinner= arrayOf("Select item","Today","Set Date","Weekly")
+        val arrSpinner= arrayOf("Select item","Today","Set Date")
         val arrayAdapter=ArrayAdapter(this,android.R.layout.simple_list_item_1,arrSpinner)
         spinnerDay.adapter=arrayAdapter
 
@@ -103,57 +101,47 @@ class DashBoardActivity : AppCompatActivity() {
         spinnerDay.onItemSelectedListener=object:AdapterView.OnItemSelectedListener{
             @RequiresApi(Build.VERSION_CODES.O)
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                  var selectedItem=spinnerDay.getItemAtPosition(position)
-                when(selectedItem){
-                    "Today"->{
+                var selectedItem = spinnerDay.getItemAtPosition(position)
+                when (selectedItem) {
 
-                        val current =LocalDate.now()
-                        startDate= current.toString()
-                        endDate=current.toString()
-                        val setDateRange: TextView =findViewById(R.id.setDateRange)
-                        setDateRange.text = startDate+ " to " +endDate
-
-
+                    "Today" -> {
+                        val current = LocalDate.now()
+                        startDate = current.toString()
+                        endDate = current.toString()
+                        val setDateRange: TextView = findViewById(R.id.setDateRange)
+                        setDateRange.text = startDate + " to " + endDate
 
                     }
 
                     "Set Date" -> {
-////                        val datePicker = MaterialDatePicker.Builder.dateRangePicker()
-////                            .setSelection(Pair(System.currentTimeMillis(), System.currentTimeMillis()))
-////                            .build()
-////
-////                        datePicker.addOnPositiveButtonClickListener { selection ->
-////                            val startDateInMillis = selection.first
-////                            val endDateInMillis = selection.second
-////
-////                            // Convert milliseconds to LocalDate properly
-////                            val startDate1 = LocalDateTime.ofInstant(Instant.ofEpochMilli(startDateInMillis), ZoneId.systemDefault()).toLocalDate().toString()
-////                            val endDate1 = LocalDateTime.ofInstant(Instant.ofEpochMilli(endDateInMillis), ZoneId.systemDefault()).toLocalDate().toString()
-////
-////                            Log.i("Set Date", "Start Date: $startDate1, End Date: $endDate1")
-//
-//                            startDate = startDate1
-//                            endDate = endDate1
-//                        }
-//
-//                        datePicker.show(supportFragmentManager, "date_range_picker")
+                       val dateRangePicker = MaterialDatePicker.Builder.dateRangePicker()
+                            .setTitleText("Select Start Date and End Date")
+                            .build()
 
-                        startDate="2024-11-11"
-                        endDate="2024-11-12"
+                        // Show the picker
+                        dateRangePicker.show(supportFragmentManager, "date_range_picker")
 
-                    }
+                        // Handle positive button click (when dates are selected)
+                        dateRangePicker.addOnPositiveButtonClickListener { datePicked ->
+                            // Retrieve start and end dates in milliseconds
+                            val startDateMillis = datePicked.first
+                            val endDateMillis = datePicked.second
 
+                            // Format dates as strings
+                            val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                            startDate = dateFormat.format(Date(startDateMillis))
+                            endDate = dateFormat.format(Date(endDateMillis))
 
-                    "Weekly"->{
-                        Toast.makeText(this@DashBoardActivity,"Weekly",Toast.LENGTH_SHORT).show()
+                            // Display the selected date range
+                            val setDateRange: TextView = findViewById(R.id.setDateRange)
+                            setDateRange.text = "$startDate to $endDate"
+                        }
                     }
                 }
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
-
             }
-
         }
 
         val OnTimeButton:AppCompatButton=findViewById(R.id.selectOnTime)

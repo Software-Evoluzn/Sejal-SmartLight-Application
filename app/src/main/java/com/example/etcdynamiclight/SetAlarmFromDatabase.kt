@@ -32,7 +32,7 @@ class SetAlarmFromDatabase {
 
                 // Loop through each day between start and end date
                 var currentDate = startDate
-                while (currentDate <= endDate) {
+                while (!currentDate .after(endDate)) {
                         // Set alarm at start time
                         calendar.time = currentDate
                         calendar.set(Calendar.HOUR_OF_DAY, startTime.hours)
@@ -43,7 +43,7 @@ class SetAlarmFromDatabase {
                             action="ON_ALARM"
                             putExtra("message", "T:5:G:G:1")
                         }
-                        val startPendingIntent = PendingIntent.getBroadcast(context, 0, startIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+                        val startPendingIntent = PendingIntent.getBroadcast(context, System.currentTimeMillis().toInt(), startIntent, PendingIntent.FLAG_UPDATE_CURRENT)
                         alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, startPendingIntent)
 
                         // Set alarm at end time
@@ -54,7 +54,7 @@ class SetAlarmFromDatabase {
                             action="OFF_ALARM"
                             putExtra("message", "T:5:G:G:0")
                         }
-                        val endPendingIntent = PendingIntent.getBroadcast(context, 1, endIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+                        val endPendingIntent = PendingIntent.getBroadcast(context, System.currentTimeMillis().toInt()+1, endIntent, PendingIntent.FLAG_UPDATE_CURRENT)
                         alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, endPendingIntent)
 
                         // Move to the next day
