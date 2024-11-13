@@ -134,10 +134,16 @@ class DashBoardActivity : AppCompatActivity() {
         val arrSpinner= arrayOf("Select item","Today","Set Date")
         val arrayAdapter=ArrayAdapter(this,android.R.layout.simple_list_item_1,arrSpinner)
         spinnerDay.adapter=arrayAdapter
+        val savedSpinnerItem=sharePreference.getString("selectedSpinnerItem","")
+        val savedPosition=arrSpinner.indexOf(savedSpinnerItem)
+        if(savedPosition>=0){
+            spinnerDay.setSelection(savedPosition)
+        }
         spinnerDay.onItemSelectedListener=object:AdapterView.OnItemSelectedListener{
             @RequiresApi(Build.VERSION_CODES.O)
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                var selectedItem = spinnerDay.getItemAtPosition(position)
+                var selectedItem = spinnerDay.getItemAtPosition(position) as String
+                editor.putString("selectedSpinnerItem",selectedItem).apply()
                 when (selectedItem) {
 
                     "Today" -> {
