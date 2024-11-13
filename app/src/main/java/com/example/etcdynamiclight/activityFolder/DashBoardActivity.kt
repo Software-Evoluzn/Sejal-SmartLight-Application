@@ -203,10 +203,20 @@ class DashBoardActivity : AppCompatActivity() {
                 if(OnTime.isNotEmpty() && OffTime.isNotEmpty()) {
                     mDbHelpher.ScheduleRegistration("123", startDate, endDate, OnTime, OffTime, "1")
                 }else{
-                    Toast.makeText(this@DashBoardActivity,"please select On time and Off time",Toast.LENGTH_SHORT).show()
+                    val alertDialog=AlertDialog.Builder(this)
+                    alertDialog.setIcon(R.drawable.logos1)
+                    alertDialog.setTitle("Evoluzn")
+                    alertDialog.setMessage("Select On Time and Off Time !")
+
+                    alertDialog.show()
                 }
             }else{
-                Toast.makeText(this@DashBoardActivity,"select today",Toast.LENGTH_SHORT).show()
+                val alertDialog=AlertDialog.Builder(this)
+                alertDialog.setIcon(R.drawable.logos1)
+                alertDialog.setTitle("Evoluzn")
+                alertDialog.setMessage("Select Start Date  and End Date !")
+
+                alertDialog.show()
             }
             val fetchingScheduleData=mDbHelpher.fetchSchedulingData()
             for( i in fetchingScheduleData) {

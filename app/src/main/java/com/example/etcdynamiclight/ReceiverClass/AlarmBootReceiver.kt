@@ -61,8 +61,8 @@ class AlarmBootReceiver:BroadcastReceiver() {
     private fun createNotification(context: Context) {
         val builder = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.evoluznlogo)
-            .setContentTitle("Alarm")
-            .setContentText("Hi everyone")
+            .setContentTitle("Evoluzn")
+            .setContentText("Alarm Schedule!")
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
         val notificationManagerCompat = NotificationManagerCompat.from(context)
