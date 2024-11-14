@@ -68,7 +68,7 @@ class DashBoardActivity : AppCompatActivity() {
          spinnerDay=findViewById(R.id.spinnerDay)
          timeAndDatePicker= ShowingDataAndTimePicker(this,supportFragmentManager)
          mUsbService= UsbService()
-        setDateRange=findViewById(R.id.setDateRange)
+         setDateRange=findViewById(R.id.setDateRange)
          OnTimeButton=findViewById(R.id.selectOnTime)
          OffTimeButton=findViewById(R.id.SelectOfTime)
 
@@ -125,6 +125,12 @@ class DashBoardActivity : AppCompatActivity() {
                 serviceIntent.putExtra("message","T:5:G:G:0")
             }
              startService(serviceIntent)
+
+            //update the toggleButton
+          val updateToggleButton=Intent("com.example.Update_Toggle_Button")
+            updateToggleButton.putExtra("status",isChecked)
+            sendBroadcast(updateToggleButton)
+
 
 
 
