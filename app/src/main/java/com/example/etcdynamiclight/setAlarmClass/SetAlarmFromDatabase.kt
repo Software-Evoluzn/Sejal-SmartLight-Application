@@ -43,7 +43,7 @@ class SetAlarmFromDatabase {
                             putExtra("message", "T:5:G:G:1")
                         }
 
-                        val startPendingIntent = PendingIntent.getBroadcast(context, System.currentTimeMillis().toInt(), startIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+                        val startPendingIntent = PendingIntent.getBroadcast(context, (System.currentTimeMillis()%Integer.MAX_VALUE).toInt(), startIntent, PendingIntent.FLAG_UPDATE_CURRENT)
                         alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, startPendingIntent)
 
                         //end time alarm
@@ -53,7 +53,7 @@ class SetAlarmFromDatabase {
                             action="OFF_ALARM"
                             putExtra("message", "T:5:G:G:0")
                         }
-                        val endPendingIntent = PendingIntent.getBroadcast(context, System.currentTimeMillis().toInt()+1, endIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+                        val endPendingIntent = PendingIntent.getBroadcast(context, (System.currentTimeMillis()%Integer.MAX_VALUE).toInt()+1, endIntent, PendingIntent.FLAG_UPDATE_CURRENT)
                         alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, endPendingIntent)
 
                         // Move to the next day

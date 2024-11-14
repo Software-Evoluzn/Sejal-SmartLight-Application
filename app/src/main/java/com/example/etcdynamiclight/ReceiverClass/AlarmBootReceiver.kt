@@ -33,18 +33,12 @@ class AlarmBootReceiver:BroadcastReceiver() {
                 createNotification(context)
             }
 
-
             val mDbHelpher= context?.let { DBHelpher(it,null) }
             val fetchDataList=mDbHelpher?.fetchSchedulingData()
             val setAlarmFromDatabase= SetAlarmFromDatabase()
             if (fetchDataList != null) {
                 setAlarmFromDatabase.fetchDataFromDataBase(fetchDataList,context)
             }
-
-
-
-//            val serviceIntent=Intent(context, UsbConnectionService::class.java)
-//            context?.startForegroundService(serviceIntent)
         }
     }
 

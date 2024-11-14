@@ -75,7 +75,7 @@ class DBHelpher(context: Context,factory:SQLiteDatabase.CursorFactory?):
     }
     fun fetchSchedulingData():ArrayList<ScheduleModel>{
         val db=this.readableDatabase
-        val fetchQuery="SELECT * FROM $tableSchedule ORDER BY $scheduling_Sr_No DESC LIMIT 1"
+        val fetchQuery="SELECT * FROM $tableSchedule ORDER BY $scheduling_Sr_No DESC "
         val cursor=db.rawQuery(fetchQuery,null)
         val arrContacts=ArrayList<ScheduleModel>()
         while(cursor.moveToNext()){

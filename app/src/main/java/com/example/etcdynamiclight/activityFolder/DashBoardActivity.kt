@@ -53,15 +53,12 @@ class DashBoardActivity : AppCompatActivity() {
     lateinit var OffTimeButton:AppCompatButton
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_dash_board)
 
-
         val sharePreference=getSharedPreferences("switchSharePreference", MODE_PRIVATE)
-
 
          mUsbHandler = USBHandler(this)
          mDbHelpher= DBHelpher(this,null)
@@ -238,17 +235,9 @@ class DashBoardActivity : AppCompatActivity() {
 
             alertDialog.show()
 
-
-
-
-
-
-
-
         }
 
     }
-
     override fun onDestroy() {
         super.onDestroy()
         mUsbHandler.unRegisterReceiver()
