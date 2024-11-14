@@ -46,11 +46,11 @@ class USBHandler(private  val context:Context){
                                 read(readCallback)
                                 setFlowControl(UsbSerialInterface.FLOW_CONTROL_OFF)
                             } else {
-                                Log.i("UsbHelper", "Port not open")
+                                Log.i("serial", "Port not open")
                             }
                         }
                     } else {
-                        Log.i("UsbHelper", "Permission not granted")
+                        Log.i("serial", "Permission not granted")
                     }
                 }
                 UsbManager.ACTION_USB_DEVICE_ATTACHED -> startUsbConnection()
@@ -73,28 +73,28 @@ class USBHandler(private  val context:Context){
                 device = entry.value
                 val deviceVendorId = device?.vendorId
                 if (deviceVendorId == 1155) {
-                    val intent = PendingIntent.getBroadcast(
-                        context, 0, Intent(ACTION_USB_PERMISSION), PendingIntent.FLAG_MUTABLE)
+                    val intent = PendingIntent.getBroadcast(context, 0, Intent(ACTION_USB_PERMISSION),0)
                     usbManager.requestPermission(device, intent)
                     Toast.makeText(context, "Connection Successful", Toast.LENGTH_SHORT).show()
                     return
                 }
             }
         } else {
-            Log.i("UsbHelper", "No USB device connected")
+            Log.i("serial", "No USB device connected")
         }
     }
 
     fun sendData(input: String) {
-        if (serial == null) {
-            Log.i("UsbHelper", "Serial is not initialized; attempting to reconnect.")
-            startUsbConnection()
-            Handler(Looper.getMainLooper()).postDelayed({
-                serial?.write(input.toByteArray()) ?: Log.i("UsbHelper", "Failed to send; Serial still null.")
-            }, 500) // delay to allow USB initialization
-        } else {
+        if(serial!=null) {
             serial?.write(input.toByteArray())
-            Log.i("UsbHelper", "Sending data: $input")
+            Log.i("serial", "sending data $input")
+        }else{
+            startUsbConnection()
+            val postDelayed = Handler(Looper.getMainLooper()).postDelayed({
+                serial?.write(input.toByteArray())
+                Log.i("serial", "sending data after reconnection- $input")
+
+            }, 500)
         }
     }
 
@@ -105,7 +105,7 @@ class USBHandler(private  val context:Context){
 
     private val readCallback = UsbSerialInterface.UsbReadCallback { data ->
         val dataStr = data?.let { String(it, Charsets.UTF_8) }
-        Log.i("UsbHelper", "Data received: $dataStr")
+        Log.i("serial", "Data received: $dataStr")
         // Add code here to handle data if needed, like updating a UI component
     }
     fun unRegisterReceiver(){

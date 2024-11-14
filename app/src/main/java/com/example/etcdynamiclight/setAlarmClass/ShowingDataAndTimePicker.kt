@@ -50,7 +50,7 @@ class ShowingDataAndTimePicker(private var context: Context,private val fragment
                     }
                 }
             }
-            Log.i("formatted time","formattedTime : $formattedTime")
+
 
             //trigger the call back with the formatted time
             onTimeSelected(formattedTime)

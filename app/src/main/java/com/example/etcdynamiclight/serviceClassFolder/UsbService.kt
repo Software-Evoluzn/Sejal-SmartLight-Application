@@ -35,15 +35,7 @@ class UsbService : Service() {
     }
 
     fun sendDataToUsbHandler(message: String) {
-        Log.i("UsbService", "Sending message to USB Handler: $message")
-        if (mUSBHandler.serial == null) {
-            mUSBHandler.startUsbConnection()  // Attempt reconnection if needed
-            android.os.Handler(Looper.getMainLooper()).postDelayed({
-                mUSBHandler.sendData(message)
-            }, 500) // small delay to ensure connection
-        } else {
-            mUSBHandler.sendData(message)
-        }
+       mUSBHandler.sendData(message)
     }
     override fun onDestroy() {
         super.onDestroy()
