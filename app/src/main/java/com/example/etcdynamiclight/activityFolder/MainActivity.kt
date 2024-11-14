@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
 
         val deviceList=mDbHelpher.fetchData()
         val recyclerView: RecyclerView =findViewById(R.id.ButtonRecyclerView)
-        toggleButtonAdapter= ToggleButtonAdapter(deviceList,mUsbHandler,this)
+        toggleButtonAdapter= ToggleButtonAdapter(deviceList,mUsbHandler)
         recyclerView.layoutManager=GridLayoutManager(this,3)
         val adapter=toggleButtonAdapter
         recyclerView.adapter=adapter
