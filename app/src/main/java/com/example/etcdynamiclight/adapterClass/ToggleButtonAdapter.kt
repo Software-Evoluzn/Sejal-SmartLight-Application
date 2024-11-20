@@ -1,15 +1,12 @@
 package com.example.etcdynamiclight.adapterClass
 
-import android.content.BroadcastReceiver
+
 import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ToggleButton
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.etcdynamiclight.R
 import com.example.etcdynamiclight.deviceConnectionclass.USBHandler
@@ -54,8 +51,6 @@ class ToggleButtonAdapter(
         }
     }
     override fun getItemCount(): Int = mList.size
-
-
 
     class ViewHolder(ItemView: View) : RecyclerView.ViewHolder(ItemView) {
         var toggleButtons: ToggleButton = itemView.findViewById(R.id.toggleButton)

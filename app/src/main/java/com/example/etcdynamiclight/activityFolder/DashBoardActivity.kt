@@ -126,14 +126,6 @@ class DashBoardActivity : AppCompatActivity() {
             }
              startService(serviceIntent)
 
-            //update the toggleButton
-          val updateToggleButton=Intent("com.example.Update_Toggle_Button")
-            updateToggleButton.putExtra("status",isChecked)
-            sendBroadcast(updateToggleButton)
-
-
-
-
         }
 
         val arrSpinner= arrayOf("Select item","Today","Set Date")
@@ -162,6 +154,7 @@ class DashBoardActivity : AppCompatActivity() {
                     "Set Date" -> {
                        val dateRangePicker = MaterialDatePicker.Builder.dateRangePicker()
                             .setTitleText("Select Start Date and End Date")
+                            .setTheme(R.style.themeMaterialCalendar)
                             .build()
                         dateRangePicker.show(supportFragmentManager, "date_range_picker")
                         dateRangePicker.addOnPositiveButtonClickListener { datePicked ->

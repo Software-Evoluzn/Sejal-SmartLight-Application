@@ -23,11 +23,7 @@ class USBHandler(private  val context:Context){
     var serial: UsbSerialDevice? = null
     private val ACTION_USB_PERMISSION = "permission"
 
-    val filter = IntentFilter().apply {
-        addAction(ACTION_USB_PERMISSION)
-        addAction(UsbManager.ACTION_USB_DEVICE_ATTACHED)
-        addAction(UsbManager.ACTION_USB_DEVICE_DETACHED)
-    }
+
 
     private val broadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
@@ -61,7 +57,13 @@ class USBHandler(private  val context:Context){
 
 
     init {
+        val filter = IntentFilter().apply {
+            addAction(ACTION_USB_PERMISSION)
+            addAction(UsbManager.ACTION_USB_DEVICE_ATTACHED)
+            addAction(UsbManager.ACTION_USB_DEVICE_DETACHED)
+        }
         context.registerReceiver(broadcastReceiver, filter)
+
         //automatically start UsbConnection
         startUsbConnection()
     }
