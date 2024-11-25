@@ -30,6 +30,11 @@ import com.example.etcdynamiclight.setAlarmClass.ShowingDataAndTimePicker
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.slider.RangeSlider
 import com.google.android.material.slider.Slider
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Delay
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.Date
@@ -123,39 +128,75 @@ class DashBoardActivity : AppCompatActivity() {
 
 
         masterSWITCH.setOnCheckedChangeListener { buttonView, isChecked ->
-            sharePreference.edit().putBoolean("status",isChecked).apply()
+            sharePreference.edit().putBoolean("status", isChecked).apply()
+            val serviceIntent = Intent(this, UsbService::class.java)
+            serviceIntent.action = "SEND_DATA"
+            CoroutineScope(Dispatchers.IO).launch {
+                if (isChecked) {
+//                serviceIntent.putExtra("message", "T:09:12:1:1")
+//                startService(serviceIntent)
+                   for(i in 1..5){
+                       mUsbHandler.sendData("T:09:12:1:1")
+                       delay(3000)
+                   }
 
-            val serviceIntent=Intent(this, UsbService::class.java)
-            serviceIntent.action="SEND_DATA"
-            if (isChecked) {
-                serviceIntent.putExtra("message","T:09:12:1:1")
-            } else {
-                serviceIntent.putExtra("message","T:09:12:1:0")
+                } else {
+//                serviceIntent.putExtra("message", "T:09:12:1:0")
+//                startService(serviceIntent)
+                    for(i in 1..5){
+                        mUsbHandler.sendData("T:09:12:1:0")
+                        delay(3000)
+                    }
+
+                }
             }
-             startService(serviceIntent)
 
         }
         intensitySlider.addOnChangeListener{slider,value,fromUser->
               rangeValue= value.toInt().toString()
           Log.i("value",rangeValue)
 
-            //service intent call
-            val serviceIntent=Intent(this,UsbService::class.java)
-            serviceIntent.action="SEND_DATA"
-            serviceIntent.putExtra("messege","T:09:12:I:$rangeValue")
+           CoroutineScope(Dispatchers.IO).launch {
+               for(i in 1..5){
+                   mUsbHandler.sendData("T:09:12:I:$rangeValue")
+                   delay(3000)
+               }
+           }
 
+            //service intent call
+//            val serviceIntent=Intent(this,UsbService::class.java)
+//            serviceIntent.action="SEND_DATA"
+//            serviceIntent.putExtra("message","T:09:12:I:$rangeValue")
+//             startService(serviceIntent)
         }
 
         motionControl.setOnCheckedChangeListener{buttonView,isChecked->
 
             val serviceIntent=Intent(this,UsbService::class.java)
             serviceIntent.action="SEND_DATA"
-            if (isChecked) {
-                serviceIntent.putExtra("message","T:09:12:M:1")
-            } else {
-                serviceIntent.putExtra("message","T:09:12:M:0")
+            CoroutineScope(Dispatchers.IO).launch {
+                if (isChecked) {
+
+//                    for (i in 1..5) {
+//                        serviceIntent.putExtra("message", "T:09:12:M:1")
+//                        startService(serviceIntent)
+//                        delay(3000)
+//
+//                    }
+                    for(i in 1..5){
+                        mUsbHandler.sendData("T:09:12:M:1")
+                        delay(3000)
+                    }
+                } else {
+                    for (i in 1..20) {
+//                        serviceIntent.putExtra("message", "T:09:12:M:0")
+//                        startService(serviceIntent)
+                        mUsbHandler.sendData("T:09:12:M:0")
+                       delay(10000)
+                    }
+                }
+
             }
-            startService(serviceIntent)
 
         }
 
@@ -271,6 +312,12 @@ class DashBoardActivity : AppCompatActivity() {
 
         }
 
+    }
+
+    fun sendDataInLoop(data:String){
+        for(i in 1..5){
+            mUsbHandler.sendData(data)
+        }
     }
     override fun onDestroy() {
         super.onDestroy()
