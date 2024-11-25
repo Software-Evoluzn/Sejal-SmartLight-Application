@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -27,6 +28,8 @@ import com.example.etcdynamiclight.serviceClassFolder.UsbService
 import com.example.etcdynamiclight.setAlarmClass.SetAlarmFromDatabase
 import com.example.etcdynamiclight.setAlarmClass.ShowingDataAndTimePicker
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.slider.RangeSlider
+import com.google.android.material.slider.Slider
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.Date
@@ -52,6 +55,8 @@ class DashBoardActivity : AppCompatActivity() {
     lateinit var setDateRange:TextView
     lateinit var OnTimeButton:AppCompatButton
     lateinit var OffTimeButton:AppCompatButton
+    lateinit var intensitySlider: Slider
+    lateinit var rangeValue:String
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,6 +78,7 @@ class DashBoardActivity : AppCompatActivity() {
          setDateRange=findViewById(R.id.setDateRange)
          OnTimeButton=findViewById(R.id.selectOnTime)
          OffTimeButton=findViewById(R.id.SelectOfTime)
+        intensitySlider=findViewById(R.id.intensitySlider)
 
         //set the dange range
         val saveStartDate=sharePreference.getString("startDate","")
@@ -127,6 +133,16 @@ class DashBoardActivity : AppCompatActivity() {
                 serviceIntent.putExtra("message","T:09:12:1:0")
             }
              startService(serviceIntent)
+
+        }
+        intensitySlider.addOnChangeListener{slider,value,fromUser->
+              rangeValue= value.toInt().toString()
+          Log.i("value",rangeValue)
+
+            //service intent call
+            val serviceIntent=Intent(this,UsbService::class.java)
+            serviceIntent.action="SEND_DATA"
+            serviceIntent.putExtra("messege","T:09:12:I:$rangeValue")
 
         }
 
