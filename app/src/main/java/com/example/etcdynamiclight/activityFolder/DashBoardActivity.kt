@@ -28,17 +28,17 @@ import com.example.etcdynamiclight.serviceClassFolder.UsbService
 import com.example.etcdynamiclight.setAlarmClass.SetAlarmFromDatabase
 import com.example.etcdynamiclight.setAlarmClass.ShowingDataAndTimePicker
 import com.google.android.material.datepicker.MaterialDatePicker
-import com.google.android.material.slider.RangeSlider
 import com.google.android.material.slider.Slider
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Delay
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.Date
 import java.util.Locale
+import kotlin.math.roundToInt
 
 
 class DashBoardActivity : AppCompatActivity() {
@@ -131,73 +131,34 @@ class DashBoardActivity : AppCompatActivity() {
             sharePreference.edit().putBoolean("status", isChecked).apply()
             val serviceIntent = Intent(this, UsbService::class.java)
             serviceIntent.action = "SEND_DATA"
-            CoroutineScope(Dispatchers.IO).launch {
-                if (isChecked) {
-//                serviceIntent.putExtra("message", "T:09:12:1:1")
-//                startService(serviceIntent)
-                   for(i in 1..5){
-                       mUsbHandler.sendData("T:09:12:1:1")
-                       delay(3000)
-                   }
+            if (isChecked) {
+                  mUsbHandler.sendData("T:09:12:1:1")
+            }else {
+                  mUsbHandler.sendData("T:09:12:1:0")
+            }
+        }
 
-                } else {
-//                serviceIntent.putExtra("message", "T:09:12:1:0")
-//                startService(serviceIntent)
-                    for(i in 1..5){
-                        mUsbHandler.sendData("T:09:12:1:0")
-                        delay(3000)
-                    }
+        intensitySlider.addOnSliderTouchListener(object :Slider.OnSliderTouchListener{
+            override fun onStartTrackingTouch(slider: Slider) {
 
-                }
             }
 
-        }
-        intensitySlider.addOnChangeListener{slider,value,fromUser->
-              rangeValue= value.toInt().toString()
-          Log.i("value",rangeValue)
+            override fun onStopTrackingTouch(slider: Slider) {
+                val sliderValue = slider.value
+                val intValue = sliderValue.roundToInt()
 
-           CoroutineScope(Dispatchers.IO).launch {
-               for(i in 1..5){
-                   mUsbHandler.sendData("T:09:12:I:$rangeValue")
-                   delay(3000)
-               }
-           }
+                mUsbHandler.sendData("T:09:12:I:$intValue")
+            }
 
-            //service intent call
-//            val serviceIntent=Intent(this,UsbService::class.java)
-//            serviceIntent.action="SEND_DATA"
-//            serviceIntent.putExtra("message","T:09:12:I:$rangeValue")
-//             startService(serviceIntent)
-        }
+        })
 
         motionControl.setOnCheckedChangeListener{buttonView,isChecked->
+            if (isChecked) {
+                mUsbHandler.sendData("T:09:12:M:1")
 
-            val serviceIntent=Intent(this,UsbService::class.java)
-            serviceIntent.action="SEND_DATA"
-            CoroutineScope(Dispatchers.IO).launch {
-                if (isChecked) {
-
-//                    for (i in 1..5) {
-//                        serviceIntent.putExtra("message", "T:09:12:M:1")
-//                        startService(serviceIntent)
-//                        delay(3000)
-//
-//                    }
-                    for(i in 1..5){
-                        mUsbHandler.sendData("T:09:12:M:1")
-                        delay(3000)
-                    }
-                } else {
-                    for (i in 1..20) {
-//                        serviceIntent.putExtra("message", "T:09:12:M:0")
-//                        startService(serviceIntent)
-                        mUsbHandler.sendData("T:09:12:M:0")
-                       delay(10000)
-                    }
-                }
-
+            } else {
+                mUsbHandler.sendData("T:09:12:M:0")
             }
-
         }
 
 
@@ -314,11 +275,7 @@ class DashBoardActivity : AppCompatActivity() {
 
     }
 
-    fun sendDataInLoop(data:String){
-        for(i in 1..5){
-            mUsbHandler.sendData(data)
-        }
-    }
+
     override fun onDestroy() {
         super.onDestroy()
         mUsbHandler.unRegisterReceiver()
