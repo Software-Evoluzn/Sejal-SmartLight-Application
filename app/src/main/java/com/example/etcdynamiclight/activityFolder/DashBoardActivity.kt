@@ -75,7 +75,7 @@ class DashBoardActivity : AppCompatActivity() {
          mDbHelpher= DBHelpher(this,null)
          setAlarmFromDatabase= SetAlarmFromDatabase()
          masterSWITCH = findViewById(R.id.MasterSwitch)
-        motionControl=findViewById(R.id.SwitchMotion)
+         motionControl=findViewById(R.id.SwitchMotion)
          masterSwitchCardView = findViewById(R.id.cardMasterSwitch)
          spinnerDay=findViewById(R.id.spinnerDay)
          timeAndDatePicker= ShowingDataAndTimePicker(this,supportFragmentManager)
@@ -83,7 +83,7 @@ class DashBoardActivity : AppCompatActivity() {
          setDateRange=findViewById(R.id.setDateRange)
          OnTimeButton=findViewById(R.id.selectOnTime)
          OffTimeButton=findViewById(R.id.SelectOfTime)
-        intensitySlider=findViewById(R.id.intensitySlider)
+         intensitySlider=findViewById(R.id.intensitySlider)
 
         //set the dange range
         val saveStartDate=sharePreference.getString("startDate","")
@@ -114,9 +114,7 @@ class DashBoardActivity : AppCompatActivity() {
 
         //set the date range
         masterSWITCH.isChecked=sharePreference.getBoolean("status",false)
-
         val filter=IntentFilter("com.example.update_master_switch")
-
         val masterSwitchReceiver=object :BroadcastReceiver(){
             override fun onReceive(context: Context?, intent: Intent?) {
                 val status = intent?.getBooleanExtra("status", false) ?: false
@@ -140,28 +138,21 @@ class DashBoardActivity : AppCompatActivity() {
 
         intensitySlider.addOnSliderTouchListener(object :Slider.OnSliderTouchListener{
             override fun onStartTrackingTouch(slider: Slider) {
-
             }
-
             override fun onStopTrackingTouch(slider: Slider) {
                 val sliderValue = slider.value
                 val intValue = sliderValue.roundToInt()
-
                 mUsbHandler.sendData("T:09:12:I:$intValue")
             }
-
         })
 
         motionControl.setOnCheckedChangeListener{buttonView,isChecked->
             if (isChecked) {
                 mUsbHandler.sendData("T:09:12:M:1")
-
             } else {
                 mUsbHandler.sendData("T:09:12:M:0")
             }
         }
-
-
 
         val arrSpinner= arrayOf("Select item","Today","Set Date")
         val arrayAdapter=ArrayAdapter(this,android.R.layout.simple_list_item_1,arrSpinner)
@@ -177,7 +168,6 @@ class DashBoardActivity : AppCompatActivity() {
                 var selectedItem = spinnerDay.getItemAtPosition(position) as String
                 editor.putString("selectedSpinnerItem",selectedItem).apply()
                 when (selectedItem) {
-
                     "Today" -> {
                         val current = LocalDate.now()
                         startDate = current.toString()
@@ -270,9 +260,7 @@ class DashBoardActivity : AppCompatActivity() {
             alertDialog.setMessage("Alarm Schedule!")
 
             alertDialog.show()
-
         }
-
     }
 
 
